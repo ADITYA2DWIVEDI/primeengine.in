@@ -1,4 +1,5 @@
 "use client";
+// Prime Engine v1.0.4 - Production Release
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Wand2, Zap, Rocket, Code2 } from "lucide-react";
