@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { razorpay } from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import shortid from "shortid";
 import { auth } from "@/auth";
 
@@ -25,6 +25,7 @@ export async function POST(req: Request) {
     };
 
     try {
+        const razorpay = getRazorpay();
         const response = await razorpay.orders.create(options);
         return NextResponse.json({
             id: response.id,

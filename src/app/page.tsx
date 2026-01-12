@@ -113,6 +113,14 @@ const AnimatedOrbs = () => (
 );
 
 export default function LandingPage() {
+  return (
+    <SessionProvider>
+      <LandingPageContent />
+    </SessionProvider>
+  );
+}
+
+function LandingPageContent() {
   const [prompt, setPrompt] = useState("");
   const [showBuilder, setShowBuilder] = useState(false);
 
