@@ -8,10 +8,13 @@ import AppBuilder from "@/components/builder/AppBuilder";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
 import { useTheme, ThemeProvider } from "@/components/ThemeProvider";
-import { ParticleBackground } from "@/components/ParticleBackground";
-import { FeaturesSection } from "@/components/FeaturesSection";
-import { HowItWorksSection } from "@/components/HowItWorksSection";
-import { FloatingCard } from "@/components/FloatingCard";
+// import { ParticleBackground } from "@/components/ParticleBackground";
+// import { FeaturesSection } from "@/components/FeaturesSection";
+// import { HowItWorksSection } from "@/components/HowItWorksSection";
+// import { FloatingCard } from "@/components/FloatingCard";
+
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic';
 
 const NavbarContent = () => {
   const { data: session } = useSession();
@@ -152,7 +155,7 @@ function LandingPageContent() {
     <main className="relative min-h-screen overflow-hidden flex flex-col items-center">
       <Navbar />
       <AnimatedOrbs />
-      <ParticleBackground />
+      {/* <ParticleBackground /> */}
 
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
 
@@ -286,11 +289,10 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Temporarily disabled for SSR fix
       <FeaturesSection />
-
-      {/* How It Works Section */}
       <HowItWorksSection />
+      */}
 
       {/* Pricing / CTA */}
       <section className="relative z-10 w-full max-w-5xl px-6 md:px-8 py-20 md:py-40 text-center space-y-12">
