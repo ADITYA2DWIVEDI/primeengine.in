@@ -134,11 +134,9 @@ const AnimatedOrbs = () => (
 
 export default function LandingPage() {
   return (
-    <ThemeProvider>
-      <SessionProvider>
-        <LandingPageContent />
-      </SessionProvider>
-    </ThemeProvider>
+    <SessionProvider>
+      <LandingPageContent />
+    </SessionProvider>
   );
 }
 
