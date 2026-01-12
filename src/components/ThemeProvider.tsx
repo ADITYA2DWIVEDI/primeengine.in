@@ -17,13 +17,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         setMounted(true);
-        const savedTheme = localStorage.getItem("theme") as Theme | null;
-        if (savedTheme) {
-            setTheme(savedTheme);
-            document.documentElement.classList.toggle("dark", savedTheme === "dark");
-        } else {
-            document.documentElement.classList.add("dark");
-        }
+        // Force light mode
+        setTheme("light");
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
     }, []);
 
     const toggleTheme = () => {
