@@ -15,10 +15,8 @@ const NavbarContent = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8 md:py-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between glass rounded-[2rem] px-6 py-4 md:px-8 shadow-2xl">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-solar-gradient flex items-center justify-center shadow-[0_0_15px_rgba(255,77,77,0.5)]">
-            <Zap className="w-5 h-5 text-black fill-black" />
-          </div>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="Prime Engine" className="w-10 h-10 object-contain" />
           <span className="text-lg md:text-xl font-bold tracking-tight uppercase">Prime Engine</span>
         </div>
 

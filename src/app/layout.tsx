@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Prime Engine | AI-Native App Builder",
   description: "Build full-stack web applications with absolute power using Prime Engine AI.",
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({
