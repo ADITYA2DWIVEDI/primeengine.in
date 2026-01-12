@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Wand2, Zap, Rocket, Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";

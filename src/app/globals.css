@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-:root {
 @theme {
   --color-solar-red: #ff4d4d;
   --color-solar-orange: #ff944d;
