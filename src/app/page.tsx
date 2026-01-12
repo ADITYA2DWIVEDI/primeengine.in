@@ -46,13 +46,13 @@ const NavbarContent = () => {
             <button onClick={() => signIn("google")} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</button>
           )}
 
-          <button
+          {/* <button
             onClick={toggleTheme}
             className="p-2 rounded-full glass hover:bg-foreground/5 transition-all"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
+          </button> */}
 
           <button
             onClick={() => document.getElementById('prompt-input')?.scrollIntoView({ behavior: 'smooth' })}
@@ -113,25 +113,9 @@ const Footnote = () => (
 );
 
 const AnimatedOrbs = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    <motion.div
-      animate={{
-        scale: [1, 1.2, 1],
-        x: [0, 100, 0],
-        y: [0, 50, 0],
-      }}
-      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute top-1/4 -left-24 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-solar-red/10 blur-[100px] md:blur-[120px] rounded-full"
-    />
-    <motion.div
-      animate={{
-        scale: [1, 1.3, 1],
-        x: [0, -120, 0],
-        y: [0, -80, 0],
-      }}
-      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      className="absolute bottom-1/4 -right-24 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-solar-orange/10 blur-[100px] md:blur-[120px] rounded-full"
-    />
+  <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-60">
+    <div className="absolute top-1/4 -left-24 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-solar-red/10 blur-[80px] rounded-full animate-float-slow" />
+    <div className="absolute bottom-1/4 -right-24 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-solar-orange/10 blur-[80px] rounded-full animate-float-slower" />
   </div>
 );
 
