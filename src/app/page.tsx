@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 import AppBuilder from "@/components/builder/AppBuilder";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
+import { useTheme } from "@/components/ThemeProvider";
 
 const NavbarContent = () => {
   const { data: session } = useSession();
+  const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -36,6 +38,14 @@ const NavbarContent = () => {
           ) : (
             <button onClick={() => signIn("google")} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</button>
           )}
+
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full glass hover:bg-foreground/5 transition-all"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
 
           <button className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform">
             Start Building
