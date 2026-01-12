@@ -47,7 +47,10 @@ const NavbarContent = () => {
             {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
-          <button className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform">
+          <button
+            onClick={() => document.getElementById('prompt-input')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform"
+          >
             Start Building
           </button>
         </div>
@@ -75,7 +78,12 @@ const NavbarContent = () => {
               <button onClick={() => signIn("google")} className="text-xl font-bold uppercase tracking-widest text-center">Log in</button>
             )}
             <hr className="border-foreground/5" />
-            <button className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest">Start Building</button>
+            <button
+              onClick={() => document.getElementById('prompt-input')?.scrollIntoView({ behavior: 'smooth' })}
+              className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest"
+            >
+              Start Building
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -186,6 +194,7 @@ function LandingPageContent() {
               <Wand2 className="w-8 h-8" />
             </div>
             <textarea
+              id="prompt-input"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="What do you want to build today?"
