@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://johndoe:mypassword@localhost:5432/prime_engine"
+}
+
+model User {
+  id       String    @id @default(cuid())
+  email    String    @unique
+  projects Project[]
+  sessions Session[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Project {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  prompt      String
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  entities    Entity[]
+  components  Component[]
+  pages       Page[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Entity {
+  id        String   @id @default(cuid())
+  name      String
+  schema    Json     
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+}
+
+model Component {
+  id        String   @id @default(cuid())
+  name      String
+  code      String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  name      String
+  route     String
+  code      String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+}
