@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@lucia-auth/adapter-prisma": "^4.0.1",
     "@prisma/client": "^6.0.1",
     "clsx": "^2.1.1",
