@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import AppBuilder from "@/components/builder/AppBuilder";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
-import { useTheme } from "@/components/ThemeProvider";
+import { useTheme, ThemeProvider } from "@/components/ThemeProvider";
 
 const NavbarContent = () => {
   const { data: session } = useSession();
@@ -130,9 +130,11 @@ const AnimatedOrbs = () => (
 
 export default function LandingPage() {
   return (
-    <SessionProvider>
-      <LandingPageContent />
-    </SessionProvider>
+    <ThemeProvider>
+      <SessionProvider>
+        <LandingPageContent />
+      </SessionProvider>
+    </ThemeProvider>
   );
 }
 
