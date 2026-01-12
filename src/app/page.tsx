@@ -194,7 +194,12 @@ export default function LandingPage() {
                 {item.img}
               </div>
               <div className="absolute bottom-12 left-12 right-12 z-20">
-                <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all">Launch Preview</button>
+                <button
+                  onClick={() => window.location.href = '/showcase'}
+                  className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all"
+                >
+                  Launch Preview
+                </button>
               </div>
             </motion.div>
           ))}
