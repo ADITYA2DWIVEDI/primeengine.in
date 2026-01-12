@@ -170,6 +170,34 @@ export default function AppBuilder({
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+
+    const handleGitHubDeploy = async () => {
+        if (!projectId) return;
+        const msg = window.prompt("Enter a name for your GitHub Repository:", "my-ai-app-v1");
+        if (!msg) return;
+
+        addLog(`Initiating deployment to GitHub: ${msg}...`);
+        try {
+            const res = await fetch("/api/deploy/github", {
+                method: "POST",
+                body: JSON.stringify({ projectId, repoName: msg }),
+                headers: { "Content-Type": "application/json" }
+            });
+            const data = await res.json();
+            if (data.repoUrl) {
+                window.open(data.repoUrl, "_blank");
+                addLog(`Success! Repo created: ${data.repoUrl}`);
+                alert(`Repository Created Successfully!\n${data.repoUrl}`);
+            } else {
+                throw new Error(data.error);
+            }
+        } catch (err: any) {
+            console.error(err);
+            addLog(`Deployment Failed: ${err.message}`);
+            alert("Deployment Failed. Make sure you are logged in with GitHub.");
+        }
+    };
+
     return (
         <div className="flex h-screen bg-background text-foreground font-sans overflow-hidden transition-colors duration-500">
             {/* Mobile Sidebar Toggle */}
@@ -363,7 +391,13 @@ export default function AppBuilder({
 
                     <div className="hidden sm:flex items-center gap-3">
                         <button className="px-5 py-2 rounded-xl glass text-[9px] font-black uppercase tracking-widest hover:border-solar-red transition-all">Export</button>
-                        <button className="px-5 py-2 rounded-xl bg-solar-gradient text-black text-[9px] font-black uppercase tracking-widest shadow-2xl shadow-solar-orange/20 hover:scale-105 transition-all">Publish</button>
+                        <button
+                            onClick={handleGitHubDeploy}
+                            disabled={!projectId}
+                            className="px-5 py-2 rounded-xl bg-solar-gradient text-black text-[9px] font-black uppercase tracking-widest shadow-2xl shadow-solar-orange/20 hover:scale-105 transition-all disabled:opacity-50"
+                        >
+                            Publish to GitHub
+                        </button>
                     </div>
                 </header>
 
