@@ -1,0 +1,194 @@
+"use client";
+
+import { useState } from "react";
+import { ArrowLeft, Sparkles, Code, Monitor, Play } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+export default function BuilderPage() {
+    const router = useRouter();
+    const [prompt, setPrompt] = useState("");
+    const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [view, setView] = useState<"preview" | "code">("preview");
+
+    const handleGenerate = async () => {
+        if (!prompt.trim()) return;
+        setLoading(true);
+
+        try {
+            const res = await fetch("/api/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt }),
+            });
+
+            const data = await res.json();
+            if (data.code) {
+                setGeneratedCode(data.code);
+            }
+        } catch (error) {
+            console.error("Generation failed", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-slate-50 flex flex-col">
+            {/* Header */}
+            <header className="h-16 border-b bg-white flex items-center justify-between px-6 shadow-sm z-10">
+                <div className="flex items-center gap-4">
+                    <button onClick={() => router.back()} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                        <ArrowLeft className="w-5 h-5 text-slate-600" />
+                    </button>
+                    <span className="font-semibold text-slate-800">AI Builder</span>
+                </div>
+
+                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+                    <button
+                        onClick={() => setView("preview")}
+                        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-shadow ${view === "preview" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-900"}`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <Monitor className="w-4 h-4" />
+                            Preview
+                        </div>
+                    </button>
+                    <button
+                        onClick={() => setView("code")}
+                        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-shadow ${view === "code" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-900"}`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <Code className="w-4 h-4" />
+                            Code
+                        </div>
+                    </button>
+                </div>
+
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                    <Play className="w-4 h-4" />
+                    Deploy
+                </button>
+            </header>
+
+            <div className="flex-1 flex overflow-hidden">
+                {/* Sidebar / Prompt Area */}
+                <div className="w-[400px] border-r bg-white flex flex-col z-10">
+                    <div className="p-6 flex-1 overflow-y-auto">
+                        <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-blue-500" />
+                            Describe your app
+                        </h2>
+                        <textarea
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            placeholder="e.g. A landing page for a coffee shop with a hero section, features list, and a newsletter form."
+                            className="w-full h-48 p-4 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none text-slate-800 placeholder:text-slate-400 text-sm leading-relaxed"
+                        />
+                        <button
+                            onClick={handleGenerate}
+                            disabled={loading || !prompt.trim()}
+                            className="mt-4 w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <Sparkles className="w-4 h-4 animate-spin" />
+                                    Generating Magic...
+                                </>
+                            ) : (
+                                <>
+                                    <Sparkles className="w-4 h-4" />
+                                    Generate Website
+                                </>
+                            )}
+                        </button>
+
+                        {generatedCode && (
+                            <div className="mt-8">
+                                <h3 className="text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wider">History</h3>
+                                <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-sm text-slate-600 truncate">
+                                    {prompt}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Main Preview Area */}
+                <div className="flex-1 bg-slate-100 p-8 flex items-center justify-center overflow-auto relative">
+                    {!generatedCode && !loading && (
+                        <div className="text-center max-w-md text-slate-400">
+                            <div className="w-16 h-16 bg-slate-200 rounded-full mx-auto flex items-center justify-center mb-4">
+                                <Monitor className="w-8 h-8 text-slate-400" />
+                            </div>
+                            <h3 className="text-lg font-medium text-slate-600 mb-1">Ready to build</h3>
+                            <p>Enter a prompt on the left to generate your React application.</p>
+                        </div>
+                    )}
+
+                    {loading && (
+                        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-20 flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                            <p className="mt-4 font-medium text-blue-600 animate-pulse">Writing code...</p>
+                        </div>
+                    )}
+
+                    {generatedCode && (
+                        <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200 relative">
+                            {view === "preview" ? (
+                                <iframe
+                                    srcDoc={`
+                          <!DOCTYPE html>
+                          <html>
+                            <head>
+                              <script src="https://cdn.tailwindcss.com"></script>
+                              <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+                              <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+                              <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+                              <script src="https://unpkg.com/lucide@latest"></script>
+                              <style>body { font-family: 'Inter', sans-serif; }</style>
+                            </head>
+                            <body>
+                              <div id="root"></div>
+                              <script type="text/babel">
+                                // Mock lucide-react since it's used in generated code
+                                const { ArrowRight, Check, Star, Menu, X, Github, Twitter, Linkedin, Mail } = window;
+                                
+                                // Mock framer-motion (basic)
+                                const motion = {
+                                  div: ({ children, className, ...props }) => <div className={className} {...props}>{children}</div>,
+                                  button: ({ children, className, ...props }) => <button className={className} {...props}>{children}</button>,
+                                  h1: ({ children, className, ...props }) => <h1 className={className} {...props}>{children}</h1>,
+                                  p: ({ children, className, ...props }) => <p className={className} {...props}>{children}</p>,
+                                };
+
+                                ${generatedCode.replace(/import .* from .*/g, "") // Remove imports 
+                                            .replace(/export default/g, "const App =")} 
+                                
+                                const root = ReactDOM.createRoot(document.getElementById('root'));
+                                root.render(<App />);
+                              </script>
+                              <script>
+                                // Post-render Lucide handling
+                                setTimeout(() => lucide.createIcons(), 100);
+                              </script>
+                            </body>
+                          </html>
+                        `}
+                                    className="w-full h-full"
+                                    title="Preview"
+                                />
+                            ) : (
+                                <div className="w-full h-full overflow-auto bg-[#1e1e1e] p-4">
+                                    <pre className="text-sm font-mono text-zinc-300">
+                                        {generatedCode}
+                                    </pre>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}

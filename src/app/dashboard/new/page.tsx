@@ -35,8 +35,9 @@ export default function NewProjectPage() {
     const handleCreate = async (templateId: string) => {
         setLoading(true);
         // Simulate creation delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        router.push("/dashboard");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Redirect to the AI Builder
+        router.push("/builder");
     };
 
     return (
