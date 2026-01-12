@@ -15,7 +15,7 @@ import { FloatingCard } from "@/components/FloatingCard";
 
 const NavbarContent = () => {
   const { data: session } = useSession();
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
