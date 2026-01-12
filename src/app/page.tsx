@@ -1,34 +1,66 @@
 "use client";
 // Prime Engine v1.0.4 - Production Release
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Wand2, Zap, Rocket, Code2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Sparkles, Wand2, Zap, Rocket, Code2, Menu, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AppBuilder from "@/components/builder/AppBuilder";
 
-const Navbar = () => (
-  <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 bg-black/50 backdrop-blur-md border-b border-white/10">
-    <div className="flex items-center gap-2">
-      <div className="w-8 h-8 rounded-lg bg-solar-gradient flex items-center justify-center shadow-[0_0_15px_rgba(255,77,77,0.5)]">
-        <Zap className="w-5 h-5 text-black fill-black" />
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8 md:py-6">
+      <div className="max-w-7xl mx-auto flex items-center justify-between glass rounded-[2rem] px-6 py-4 md:px-8 shadow-2xl">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-solar-gradient flex items-center justify-center shadow-[0_0_15px_rgba(255,77,77,0.5)]">
+            <Zap className="w-5 h-5 text-black fill-black" />
+          </div>
+          <span className="text-lg md:text-xl font-bold tracking-tight uppercase">Prime Engine</span>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-foreground/70">
+          <a href="/" className="hover:text-foreground transition-colors">Product</a>
+          <a href="/showcase" className="hover:text-foreground transition-colors">Showcase</a>
+          <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
+          <div className="w-[1px] h-4 bg-foreground/10" />
+          <div className="w-[1px] h-4 bg-foreground/10" />
+          <a href="#" className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</a>
+          <button className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform">
+            Start Building
+          </button>
+        </div>
+
+        <div className="lg:hidden flex items-center gap-4">
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2">
+            {isMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
-      <span className="text-xl font-bold tracking-tight text-white uppercase">Prime Engine</span>
-    </div>
-    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
-      <a href="/" className="hover:text-white transition-colors">Product</a>
-      <a href="/showcase" className="hover:text-white transition-colors">Showcase</a>
-      <a href="/docs" className="hover:text-white transition-colors">Documentation</a>
-      <a href="#" className="px-5 py-2 rounded-full glass hover:bg-white/10 text-white transition-all">Log in</a>
-      <button className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform">
-        Start Building
-      </button>
-    </div>
-  </nav>
-);
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="lg:hidden absolute top-full left-4 right-4 mt-4 glass rounded-[2rem] p-8 flex flex-col gap-6 shadow-2xl"
+          >
+            <a href="/" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Product</a>
+            <a href="/showcase" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Showcase</a>
+            <a href="/docs" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Documentation</a>
+            <hr className="border-foreground/5" />
+            <button className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest">Start Building</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
 
 const Footnote = () => (
-  <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center text-white/40 text-sm">
-    <p>Powered by Prime Intelligence • Built for 2026</p>
+  <div className="px-8 py-12 text-center text-foreground/40 text-sm">
+    <p>© 2026 Prime Intelligence • Neural Architecture manifest.</p>
   </div>
 );
 
@@ -41,7 +73,7 @@ const AnimatedOrbs = () => (
         y: [0, 50, 0],
       }}
       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute top-1/4 -left-24 w-[500px] h-[500px] bg-solar-red/10 blur-[120px] rounded-full"
+      className="absolute top-1/4 -left-24 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-solar-red/10 blur-[100px] md:blur-[120px] rounded-full"
     />
     <motion.div
       animate={{
@@ -50,14 +82,7 @@ const AnimatedOrbs = () => (
         y: [0, -80, 0],
       }}
       transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      className="absolute bottom-1/4 -right-24 w-[600px] h-[600px] bg-solar-orange/10 blur-[120px] rounded-full"
-    />
-    <motion.div
-      animate={{
-        opacity: [0.05, 0.1, 0.05],
-      }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-solar-yellow/5 blur-[160px] rounded-full"
+      className="absolute bottom-1/4 -right-24 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-solar-orange/10 blur-[100px] md:blur-[120px] rounded-full"
     />
   </div>
 );
@@ -71,16 +96,14 @@ export default function LandingPage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-solar-black overflow-hidden flex flex-col items-center px-4 pt-32 pb-20">
+    <main className="relative min-h-screen overflow-hidden flex flex-col items-center">
       <Navbar />
       <AnimatedOrbs />
 
-      {/* Grid Background */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-5xl w-full text-center space-y-12">
+      <div className="relative z-10 w-full max-w-7xl px-6 md:px-8 pt-40 md:pt-56 pb-20 text-center space-y-12 md:space-y-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -91,20 +114,20 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass text-[10px] font-black italic text-solar-orange border-solar-orange/30 uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(255,148,77,0.1)]"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass text-[10px] font-black italic text-solar-orange border-solar-orange/30 uppercase tracking-[0.2em]"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            Next-Gen AI Neural Engine
+            AI Superpowers
           </motion.div>
 
-          <h1 className="text-7xl md:text-[9rem] font-black tracking-tighter text-white uppercase leading-[0.8] drop-shadow-2xl">
-            Atomic <br />
-            <span className="text-gradient-solar">Creation.</span>
+          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase leading-[0.85] md:leading-[0.8]">
+            Built with <br />
+            <span className="text-gradient-solar">Magic.</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/40 max-w-3xl mx-auto font-medium tracking-tight leading-relaxed">
-            Prime Engine architecturally evolves your vision into industrial-grade softare.
-            <span className="text-white/80 block mt-2">No code. No limits. Just Pure Intelligence.</span>
+          <p className="text-lg md:text-2xl text-foreground/40 max-w-3xl mx-auto font-medium tracking-tight">
+            Prime Engine turns your simple words into working apps in seconds.
+            <span className="text-foreground/80 block mt-2">No code. No stress. Just amazing results.</span>
           </p>
         </motion.div>
 
@@ -112,34 +135,31 @@ export default function LandingPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="relative max-w-3xl mx-auto group"
+          whileHover={{ perspective: 1000, rotateX: 2, rotateY: -2 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="relative max-w-3xl mx-auto group w-full cursor-default"
         >
-          <div className="absolute -inset-2 bg-solar-gradient rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-20 group-focus-within:opacity-30 transition-all duration-700" />
-          <div className="relative glass rounded-[2.5rem] p-5 flex items-center gap-6 premium-shadow border-white/10 group-focus-within:border-solar-orange/40 transition-all">
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="p-4 rounded-2xl bg-white/5 border border-white/10 text-solar-yellow"
-            >
+          <div className="absolute -inset-2 bg-solar-gradient rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-10 group-focus-within:opacity-20 transition-all duration-700" />
+          <div className="relative glass rounded-[2.5rem] p-3 md:p-5 flex flex-col md:flex-row items-center gap-4 md:gap-6 premium-shadow border-white/10 group-focus-within:border-solar-orange/40 transition-all">
+            <div className="hidden md:flex p-4 rounded-2xl bg-white/5 text-solar-yellow">
               <Wand2 className="w-8 h-8" />
-            </motion.div>
+            </div>
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Design a futuristic AI-driven logistics dashboard..."
-              className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder:text-white/20 text-xl font-medium resize-none py-3 h-14 leading-tight"
+              placeholder="What do you want to build today?"
+              className="flex-1 w-full bg-transparent border-none focus:ring-0 text-foreground placeholder:text-foreground/20 text-lg md:text-xl font-medium resize-none py-3 h-14 md:h-14 leading-tight"
             />
             <button
               onClick={() => prompt.length > 5 && setShowBuilder(true)}
               className={cn(
-                "w-16 h-16 rounded-2xl transition-all duration-500 flex items-center justify-center transform",
+                "w-12 h-12 md:w-16 md:h-16 rounded-2xl transition-all duration-500 flex items-center justify-center transform self-end md:self-center",
                 prompt.length > 5
-                  ? "bg-solar-gradient text-black shadow-[0_0_30px_rgba(255,148,77,0.5)] scale-100 rotate-0"
-                  : "bg-white/5 text-white/10 scale-90 -rotate-12"
+                  ? "bg-solar-gradient text-black shadow-[0_0_30px_rgba(255,148,77,0.5)] scale-100"
+                  : "bg-white/5 text-foreground/10 scale-90"
               )}
             >
-              <ArrowRight className="w-8 h-8 font-black" />
+              <ArrowRight className="w-6 h-6 md:w-8 md:h-8 font-black" />
             </button>
           </div>
         </motion.div>
@@ -149,32 +169,31 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="flex flex-wrap justify-center gap-4 pt-6"
+          className="flex flex-wrap justify-center gap-2 md:gap-4"
         >
-          {["SaaS Dashboard", "Portfolio Site", "Real-estate App", "Inventory Manager"].map((tmp, i) => (
-            <motion.button
+          {["SaaS Dashboard", "Portfolio", "Real-estate", "Inventory"].map((tmp) => (
+            <button
               key={tmp}
-              whileHover={{ scale: 1.05, y: -2 }}
               onClick={() => { setPrompt(`Build a ${tmp}`); setShowBuilder(true); }}
-              className="px-6 py-2.5 rounded-full glass text-[10px] font-black text-white/40 hover:text-white border-white/5 hover:border-solar-red/30 transition-all uppercase tracking-[0.15em] hover:shadow-[0_0_20px_rgba(255,77,77,0.2)]"
+              className="px-4 md:px-6 py-2 md:py-2.5 rounded-full glass text-[9px] md:text-[10px] font-black text-foreground/40 hover:text-foreground uppercase tracking-widest transition-all"
             >
               # {tmp}
-            </motion.button>
+            </button>
           ))}
         </motion.div>
       </div>
 
-      {/* Showcase Preview */}
-      <section className="relative z-10 max-w-7xl w-full px-8 py-40">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+      {/* Showcase Grid */}
+      <section className="relative z-10 w-full max-w-7xl px-6 md:px-8 py-20 md:py-40">
+        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-12 md:mb-20 gap-8">
           <div className="space-y-4">
-            <div className="text-solar-red font-black text-xs uppercase tracking-[0.4em]">Engineered Excellence</div>
-            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">Built with <br /><span className="text-gradient-solar">Prime Logic.</span></h2>
+            <div className="text-solar-red font-black text-xs uppercase tracking-[0.4em]">Made by AI</div>
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none italic">Choose a <br /><span className="text-gradient-solar">Template.</span></h2>
           </div>
-          <p className="text-white/40 max-w-md text-sm font-medium leading-relaxed">Prime Engine uses proprietary neural architectures to ensure every line of code is performance-optimized and scalable from day zero.</p>
+          <p className="text-foreground/40 max-w-md text-sm md:text-base font-medium leading-relaxed">Starting is easy. Just pick a style and let the AI build the rest for you instantly.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {[
             { tag: "E-Commerce", title: "Solar Storefront", img: "🛍️" },
             { tag: "Fintech", title: "Quantum Ledger", img: "💳" },
@@ -182,23 +201,29 @@ export default function LandingPage() {
           ].map((item, i) => (
             <motion.div
               key={i}
-              whileHover={{ y: -10 }}
-              className="group relative h-[400px] rounded-[3rem] overflow-hidden border border-white/5 glass"
+              whileHover={{
+                y: -15,
+                rotateX: 5,
+                rotateY: 5,
+                scale: 1.02,
+                transition: { duration: 0.3 }
+              }}
+              className="group relative h-[350px] md:h-[400px] rounded-[3rem] overflow-hidden border border-white/5 glass cursor-pointer preserve-3d shadow-2xl"
             >
               <div className="absolute inset-0 bg-solar-gradient opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
-              <div className="absolute top-12 left-12 space-y-2 z-20">
+              <div className="absolute top-10 left-10 space-y-2 z-20">
                 <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase text-solar-orange tracking-widest">{item.tag}</span>
-                <h3 className="text-3xl font-black uppercase tracking-tighter italic">{item.title}</h3>
+                <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tighter italic">{item.title}</h3>
               </div>
-              <div className="absolute inset-0 flex items-center justify-center text-8xl grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700">
+              <div className="absolute inset-0 flex items-center justify-center text-7xl md:text-8xl grayscale opacity-20 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
                 {item.img}
               </div>
-              <div className="absolute bottom-12 left-12 right-12 z-20">
+              <div className="absolute bottom-10 left-10 right-10 z-20">
                 <button
                   onClick={() => window.location.href = '/showcase'}
-                  className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all"
+                  className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-solar-gradient hover:text-black hover:border-transparent transition-all"
                 >
-                  Launch Preview
+                  See it Work
                 </button>
               </div>
             </motion.div>
@@ -206,77 +231,27 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Core Features */}
-      <section className="relative z-10 max-w-7xl w-full px-8 py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
-        {[
-          { icon: <Zap />, title: "Hyper-Speed", desc: "Atomic generation in sub-60 seconds. Deploy at the speed of thought." },
-          { icon: <Code2 />, title: "Neural Logic", desc: "Proprietary AI architectures that write better code than seniors." },
-          { icon: <Rocket />, title: "Edge Ready", desc: "One-click deployment to 300+ edge nodes globally for zero latency." },
-        ].map((f, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: i * 0.1 }}
-            viewport={{ once: true }}
-            className="group p-10 rounded-[3rem] glass border-white/5 space-y-6 hover:border-solar-red/30 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(255,77,77,0.05)]"
-          >
-            <div className="w-16 h-16 rounded-[1.5rem] bg-solar-gradient flex items-center justify-center text-black shadow-2xl shadow-solar-red/20 group-hover:scale-110 transition-transform">
-              <div className="w-7 h-7">{f.icon}</div>
+      {/* Pricing / CTA */}
+      <section className="relative z-10 w-full max-w-5xl px-6 md:px-8 py-20 md:py-40 text-center space-y-12">
+        <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter">Simple <span className="text-gradient-solar">Pricing.</span></h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-10 md:p-16 rounded-[4rem] glass text-left space-y-8">
+            <h3 className="text-2xl md:text-3xl font-black uppercase italic">Free Plan</h3>
+            <p className="text-4xl md:text-6xl font-black">$0</p>
+            <button className="w-full py-5 rounded-2xl bg-foreground/5 hover:bg-foreground/10 text-foreground font-black uppercase tracking-widest transition-all">Get Started</button>
+          </div>
+          <div className="p-10 md:p-16 rounded-[4rem] bg-foreground text-background border-2 border-solar-orange text-left space-y-8 relative overflow-hidden">
+            <div className="relative z-10 space-y-8">
+              <h3 className="text-2xl md:text-3xl font-black uppercase italic text-solar-orange">Pro Plan</h3>
+              <p className="text-4xl md:text-6xl font-black">$29</p>
+              <button
+                onClick={() => setShowBuilder(true)}
+                className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest"
+              >
+                Go Pro
+              </button>
             </div>
-            <h3 className="text-2xl font-black uppercase italic tracking-tighter">{f.title}</h3>
-            <p className="text-white/30 text-base leading-relaxed font-medium">{f.desc}</p>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* Pricing Section */}
-      <section className="relative z-10 max-w-6xl w-full px-8 py-40 text-center space-y-24">
-        <div className="space-y-6 max-w-2xl mx-auto">
-          <div className="text-solar-orange font-black text-xs uppercase tracking-[0.5em]">Global Pricing</div>
-          <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none">Universal <span className="text-gradient-solar">Access.</span></h2>
-          <p className="text-white/40 text-xl font-medium">Simple, transparent, and built for growth.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="p-16 rounded-[4rem] glass border-white/10 text-left space-y-10 relative overflow-hidden"
-          >
-            <div className="space-y-3">
-              <h3 className="text-3xl font-black uppercase italic text-white/80">Standard</h3>
-              <div className="text-7xl font-black tracking-tighter">$0<span className="text-2xl text-white/20 font-medium">/MO</span></div>
-            </div>
-            <ul className="space-y-5 text-sm font-bold uppercase tracking-widest text-white/40">
-              <li className="flex items-center gap-4"><div className="w-1.5 h-1.5 rounded-full bg-solar-red" /> 3 AI Projects</li>
-              <li className="flex items-center gap-4"><div className="w-1.5 h-1.5 rounded-full bg-solar-red" /> Standard UI Logic</li>
-              <li className="flex items-center gap-4"><div className="w-1.5 h-1.5 rounded-full bg-solar-red" /> Global Community</li>
-            </ul>
-            <button className="w-full py-6 rounded-3xl border-2 border-white/5 hover:bg-white/5 font-black uppercase tracking-[0.2em] transition-all text-[11px]">Initiate Setup</button>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="p-16 rounded-[4rem] bg-solar-black border-2 border-solar-orange text-left space-y-10 relative overflow-hidden shadow-[0_0_60px_rgba(255,148,77,0.15)]"
-          >
-            <div className="absolute top-0 right-0 p-12 text-solar-orange opacity-10">
-              <Zap className="w-40 h-40" />
-            </div>
-            <div className="space-y-3 relative z-10">
-              <div className="flex items-center justify-between">
-                <h3 className="text-3xl font-black uppercase italic text-solar-orange">Prime Elite</h3>
-                <span className="px-4 py-1.5 bg-solar-orange text-black text-[10px] font-black rounded-full uppercase tracking-widest">Recommended</span>
-              </div>
-              <div className="text-7xl font-black tracking-tighter text-white">$29<span className="text-2xl text-white/20 font-medium italic">/MO</span></div>
-            </div>
-            <ul className="space-y-5 text-sm font-bold uppercase tracking-widest text-white/80 relative z-10">
-              <li className="flex items-center gap-4"><Zap className="w-4 h-4 text-solar-orange" /> Unlimited Neural Builds</li>
-              <li className="flex items-center gap-4"><Zap className="w-4 h-4 text-solar-orange" /> Direct Domain Binding</li>
-              <li className="flex items-center gap-4"><Zap className="w-4 h-4 text-solar-orange" /> Full Source Manifest</li>
-              <li className="flex items-center gap-4"><Zap className="w-4 h-4 text-solar-orange" /> Priority Edge Access</li>
-            </ul>
-            <button className="w-full py-6 rounded-3xl bg-solar-gradient text-black font-black uppercase tracking-[0.2em] transition-all text-[11px] shadow-2xl shadow-solar-orange/40 hover:scale-[1.02]">Access Neural Grid</button>
-          </motion.div>
+          </div>
         </div>
       </section>
 

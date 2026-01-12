@@ -12,32 +12,40 @@
 
 @layer base {
   :root {
-    --background: var(--color-solar-black);
-    --foreground: var(--color-solar-white);
+    /* Replacing #0a0a0a with a deep warm charcoal/brown */
+    --background: #ffffff;
+    --foreground: #2d2420;
+    --glass-bg: rgba(255, 148, 77, 0.03);
+    /* Subtle warm tint */
+    --glass-border: rgba(255, 77, 77, 0.08);
+    --premium-shadow: 0 12px 40px -10px rgba(45, 36, 32, 0.1);
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
-    @apply antialiased selection:bg-solar-red/30;
+    @apply antialiased selection:bg-solar-red/30 transition-colors duration-500;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
   }
 
   .glow-red {
-    text-shadow: 0 0 10px rgba(255, 77, 77, 0.5), 0 0 20px rgba(255, 77, 77, 0.3);
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4), 0 0 20px rgba(255, 77, 77, 0.2);
   }
 
   .glow-orange {
-    text-shadow: 0 0 10px rgba(255, 148, 77, 0.5), 0 0 20px rgba(255, 148, 77, 0.3);
+    text-shadow: 0 0 10px rgba(255, 148, 77, 0.4), 0 0 20px rgba(255, 148, 77, 0.2);
   }
 
   .glow-border-red {
-    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.15);
   }
 
   .text-gradient-solar {
@@ -49,6 +57,14 @@
   }
 
   .premium-shadow {
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: var(--premium-shadow);
+  }
+
+  .responsive-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
   }
 }
