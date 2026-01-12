@@ -5,8 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Wand2, Zap, Rocket, Code2, Menu, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AppBuilder from "@/components/builder/AppBuilder";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 
-const Navbar = () => {
+const NavbarContent = () => {
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -24,8 +27,18 @@ const Navbar = () => {
           <a href="/showcase" className="hover:text-foreground transition-colors">Showcase</a>
           <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
           <div className="w-[1px] h-4 bg-foreground/10" />
-          <div className="w-[1px] h-4 bg-foreground/10" />
-          <a href="#" className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</a>
+
+          {session ? (
+            <div className="flex items-center gap-4">
+              <span className="text-foreground font-bold">{session.user?.name}</span>
+              {/* @ts-ignore */}
+              {session.user?.isPro && <span className="px-2 py-0.5 bg-solar-gold text-black text-[9px] font-black uppercase rounded">PRO</span>}
+              <button onClick={() => signOut()} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log out</button>
+            </div>
+          ) : (
+            <button onClick={() => signIn("google")} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</button>
+          )}
+
           <button className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform">
             Start Building
           </button>
@@ -48,7 +61,11 @@ const Navbar = () => {
           >
             <a href="/" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Product</a>
             <a href="/showcase" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Showcase</a>
-            <a href="/docs" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Documentation</a>
+            {session ? (
+              <button onClick={() => signOut()} className="text-xl font-bold uppercase tracking-widest text-center text-red-500">Log out</button>
+            ) : (
+              <button onClick={() => signIn("google")} className="text-xl font-bold uppercase tracking-widest text-center">Log in</button>
+            )}
             <hr className="border-foreground/5" />
             <button className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest">Start Building</button>
           </motion.div>
@@ -57,6 +74,14 @@ const Navbar = () => {
     </nav>
   );
 };
+
+const Navbar = () => {
+  return (
+    <SessionProvider>
+      <NavbarContent />
+    </SessionProvider>
+  )
+}
 
 const Footnote = () => (
   <div className="px-8 py-12 text-center text-foreground/40 text-sm">
@@ -244,12 +269,7 @@ export default function LandingPage() {
             <div className="relative z-10 space-y-8">
               <h3 className="text-2xl md:text-3xl font-black uppercase italic text-solar-orange">Pro Plan</h3>
               <p className="text-4xl md:text-6xl font-black">$29</p>
-              <button
-                onClick={() => setShowBuilder(true)}
-                className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest"
-              >
-                Go Pro
-              </button>
+              <ProButton setShowBuilder={setShowBuilder} />
             </div>
           </div>
         </div>
@@ -258,4 +278,58 @@ export default function LandingPage() {
       <Footnote />
     </main>
   );
+}
+
+const ProButton = ({ setShowBuilder }: { setShowBuilder: (val: boolean) => void }) => {
+  const { data: session } = useSession();
+
+  const handlePayment = async () => {
+    if (!session) {
+      signIn("google");
+      return;
+    }
+
+    const res = await fetch("/api/payment/create-order", { method: "POST" });
+    const data = await res.json();
+
+    if (data.id) {
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Prime Engine Pro",
+        description: "Unlock AI superpowers",
+        order_id: data.id,
+        handler: async (response: any) => {
+          const verifyRes = await fetch("/api/payment/verify", {
+            method: "POST",
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            }),
+            headers: { "Content-Type": "application/json" }
+          });
+          const verifyData = await verifyRes.json();
+          if (verifyData.success) {
+            alert("Upgrade Successful! Welcome to Prime Pro.");
+            window.location.reload();
+          }
+        },
+        theme: { color: "#FF4D4D" }
+      };
+      // @ts-ignore
+      const rzp1 = new window.Razorpay(options);
+      rzp1.open();
+    }
+  };
+
+  return (
+    <button
+      onClick={handlePayment}
+      className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest"
+    >
+      Go Pro
+    </button>
+  )
 }

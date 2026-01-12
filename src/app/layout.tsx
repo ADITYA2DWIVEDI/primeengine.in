@@ -15,9 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-solar-black text-white antialiased`}>
+    <html lang="en">
+      <body className={`${inter.className} bg-background text-foreground antialiased`}>
         {children}
+        <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
       </body>
     </html>
   );
