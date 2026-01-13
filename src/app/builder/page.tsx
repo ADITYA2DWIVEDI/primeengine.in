@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Sparkles, Code, Monitor, Play } from "lucide-react";
+import { ArrowLeft, Sparkles, Code, Monitor, Play, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function BuilderPage() {
@@ -9,7 +9,36 @@ export default function BuilderPage() {
     const [prompt, setPrompt] = useState("");
     const [generatedCode, setGeneratedCode] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [deploying, setDeploying] = useState(false);
+    const [deployResult, setDeployResult] = useState<{ repoUrl: string, deployUrl: string } | null>(null);
     const [view, setView] = useState<"preview" | "code">("preview");
+
+    const handleDeploy = async () => {
+        if (!generatedCode) return;
+        setDeploying(true);
+        try {
+            const res = await fetch("/api/deploy", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code: generatedCode, prompt }),
+            });
+
+            if (res.status === 401) {
+                alert("Please login with GitHub to deploy!");
+                return;
+            }
+
+            const data = await res.json();
+            if (data.repoUrl) {
+                setDeployResult(data);
+            }
+        } catch (error) {
+            console.error("Deploy failed", error);
+            alert("Deployment failed. See console.");
+        } finally {
+            setDeploying(false);
+        }
+    };
 
     const handleGenerate = async () => {
         if (!prompt.trim()) return;
@@ -65,11 +94,48 @@ export default function BuilderPage() {
                     </button>
                 </div>
 
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                    <Play className="w-4 h-4" />
-                    Deploy
+                <button
+                    onClick={handleDeploy}
+                    disabled={deploying || !generatedCode}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                    {deploying ? (
+                        <>
+                            <Sparkles className="w-4 h-4 animate-spin" />
+                            Pushing...
+                        </>
+                    ) : (
+                        <>
+                            <Play className="w-4 h-4" />
+                            Deploy
+                        </>
+                    )}
                 </button>
             </header>
+
+            {deployResult && (
+                <div className="absolute top-20 right-6 z-50 p-4 bg-white rounded-xl shadow-2xl border border-green-100 w-80 animate-in slide-in-from-top-4">
+                    <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-bold text-green-600 flex items-center gap-2">
+                            <Check className="w-5 h-5" />
+                            Deployed Successfully!
+                        </h3>
+                        <button onClick={() => setDeployResult(null)}><X className="w-4 h-4 text-slate-400" /></button>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-4">Your app has been pushed to GitHub.</p>
+                    <div className="space-y-2">
+                        <a href={deployResult.repoUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors">
+                            View GitHub Repo
+                        </a>
+                        <a href={deployResult.deployUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-black hover:bg-zinc-800 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                            <svg className="w-4 h-4 text-white" viewBox="0 0 1155 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M577.344 0L1154.69 1000H0L577.344 0Z" />
+                            </svg>
+                            Deploy to Vercel
+                        </a>
+                    </div>
+                </div>
+            )}
 
             <div className="flex-1 flex overflow-hidden">
                 {/* Sidebar / Prompt Area */}
