@@ -1,6 +1,6 @@
-
 import Google from "next-auth/providers/google"
 import GitHub from "next-auth/providers/github"
+import Credentials from "next-auth/providers/credentials"
 import type { NextAuthConfig } from "next-auth"
 
 export const authConfig = {
@@ -16,6 +16,26 @@ export const authConfig = {
                 params: {
                     scope: "read:user user:email repo",
                 },
+            },
+        }),
+        Credentials({
+            name: "Firebase",
+            credentials: {
+                idToken: { label: "ID Token", type: "text" },
+            },
+            async authorize(credentials) {
+                if (!credentials?.idToken) return null;
+
+                try {
+                    // We need the admin auth here, but authConfig should be edge-light.
+                    // However, 'credentials' usually runs on the server (lambda) in NextAuth v5.
+                    // We will import it dynamically inside the handler if needed, 
+                    // or define it in auth.ts which is full server.
+                    // For now, let's keep the provider here and handle logic in auth.ts
+                    return { id: "pending-verification", email: "pending@auth.com" };
+                } catch (e) {
+                    return null;
+                }
             },
         })
     ],

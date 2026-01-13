@@ -7,6 +7,47 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     ...authConfig,
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" }, // Force JWT strategy for edge compatibility mix
+    providers: [
+        ...authConfig.providers.filter(p => p.id !== 'credentials'),
+        {
+            id: 'credentials',
+            name: 'Credentials',
+            type: 'credentials',
+            credentials: {
+                idToken: { label: "ID Token", type: "text" },
+            },
+            async authorize(credentials: any) {
+                const { idToken } = credentials;
+                if (!idToken) return null;
+
+                try {
+                    const { adminAuth } = await import("@/lib/firebase-admin");
+                    const decodedToken = await adminAuth.verifyIdToken(idToken);
+
+                    if (decodedToken) {
+                        // Upsert user in Prisma
+                        const user = await prisma.user.upsert({
+                            where: { email: decodedToken.email },
+                            update: {
+                                name: decodedToken.name,
+                                image: decodedToken.picture,
+                            },
+                            create: {
+                                email: decodedToken.email!,
+                                name: decodedToken.name,
+                                image: decodedToken.picture,
+                            },
+                        });
+                        return user;
+                    }
+                    return null;
+                } catch (error) {
+                    console.error("Firebase Auth Error:", error);
+                    return null;
+                }
+            }
+        }
+    ],
     callbacks: {
         ...authConfig.callbacks,
         async session({ session, token, user }) {
