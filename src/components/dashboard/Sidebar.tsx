@@ -32,10 +32,10 @@ export function Sidebar() {
                     <span className="font-bold text-lg tracking-tight">Prime Engine</span>
                 </div>
 
-                <button className="w-full py-2 px-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center justify-center gap-2 text-sm font-medium">
+                <Link href="/dashboard/new" className="w-full py-2 px-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center justify-center gap-2 text-sm font-medium">
                     <Plus className="w-4 h-4" />
                     New Project
-                </button>
+                </Link>
             </div>
 
             <nav className="flex-1 px-4 space-y-1">
