@@ -61,9 +61,12 @@ export default function BuilderPage() {
             const data = await res.json();
             if (data.code) {
                 setGeneratedCode(data.code);
+            } else if (data.error) {
+                throw new Error(data.error);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Generation failed", error);
+            alert(`Generation Failed: ${error.message || "Unknown error"}`);
         } finally {
             setLoading(false);
         }

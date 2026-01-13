@@ -10,6 +10,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
         }
 
+        if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+            console.error("Server Error: Missing GOOGLE_GENERATIVE_AI_API_KEY");
+            return NextResponse.json({ error: "Server Configuration Error: API Key missing" }, { status: 500 });
+        }
+
         const systemPrompt = `
     You are an expert AI web developer specializing in React, TypeScript, Tailwind CSS, and Next.js.
     Your task is to generate a single-file React component based on the user's request.
