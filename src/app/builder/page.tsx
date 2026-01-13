@@ -31,12 +31,17 @@ export default function BuilderPage() {
             }
 
             const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Deployment failed");
+            }
+
             if (data.repoUrl) {
                 setDeployResult(data);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Deploy failed", error);
-            alert("Deployment failed. See console.");
+            alert(`Deployment Failed: ${error.message || "Unknown error"}`);
         } finally {
             setDeploying(false);
         }
