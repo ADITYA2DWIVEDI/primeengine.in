@@ -43,23 +43,15 @@ const NavbarContent = () => {
               <button onClick={() => signOut()} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log out</button>
             </div>
           ) : (
-            <button onClick={() => signIn("google")} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</button>
+            <a href="/login" className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</a>
           )}
 
-          {/* <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full glass hover:bg-foreground/5 transition-all"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button> */}
-
-          <button
-            onClick={() => document.getElementById('prompt-input')?.scrollIntoView({ behavior: 'smooth' })}
+          <a
+            href="/login"
             className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform"
           >
             Start Building
-          </button>
+          </a>
         </div>
 
         <div className="lg:hidden flex items-center gap-4">
