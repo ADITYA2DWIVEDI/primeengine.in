@@ -1,0 +1,27 @@
+
+ name                                       value               environments        created    
+ AUTH_GITHUB_SECRET                         Encrypted           Production          13h ago    
+ AUTH_GITHUB_ID                             Encrypted           Production          13h ago    
+ NEXT_PUBLIC_RAZORPAY_KEY_ID                Encrypted           Production          13h ago    
+ RAZORPAY_KEY_SECRET                        Encrypted           Production          13h ago    
+ RAZORPAY_KEY_ID                            Encrypted           Production          13h ago    
+ AUTH_GOOGLE_SECRET                         Encrypted           Production          13h ago    
+ AUTH_GOOGLE_ID                             Encrypted           Production          13h ago    
+ NEXT_PUBLIC_APP_URL                        Encrypted           Production          13h ago    
+ FREEPIK_API_KEY                            Encrypted           Production          13h ago    
+ PERPLEXITY_API_KEY                         Encrypted           Production          13h ago    
+ GOOGLE_GENERATIVE_AI_API_KEY               Encrypted           Production          13h ago    
+ OPENAI_API_KEY                             Encrypted           Production          13h ago    
+ FIREBASE_PRIVATE_KEY                       Encrypted           Production          13h ago    
+ FIREBASE_CLIENT_EMAIL                      Encrypted           Production          13h ago    
+ FIREBASE_PROJECT_ID                        Encrypted           Production          13h ago    
+ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID        Encrypted           Production          13h ago    
+ NEXT_PUBLIC_FIREBASE_APP_ID                Encrypted           Production          13h ago    
+ NEXT_PUBLIC_FIREBASE_PROJECT_ID            Encrypted           Production          13h ago    
+ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN           Encrypted           Production          13h ago    
+ NEXT_PUBLIC_FIREBASE_API_KEY               Encrypted           Production          13h ago    
+ DATABASE_URL                               Encrypted           Production          13h ago    
+ AUTH_TRUST_HOST                            Encrypted           Production          13h ago    
+ NEXTAUTH_URL                               Encrypted           Production          13h ago    
+ AUTH_SECRET                                Encrypted           Production          13h ago    
+

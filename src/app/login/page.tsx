@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Mail, Lock, User, Github, ArrowRight, Chrome } from "lucide-react";
-import Link from "next/link";
+import { auth as firebaseAuth, googleProvider, githubProvider } from "@/lib/firebase";
+import { signInWithPopup } from "firebase/auth";
 
 export default function LoginPage() {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -11,7 +12,23 @@ export default function LoginPage() {
 
     const handleSocialLogin = async (provider: string) => {
         setLoading(true);
-        await signIn(provider, { callbackUrl: "/dashboard" });
+        try {
+            const fireProvider = provider === 'google' ? googleProvider : githubProvider;
+            const result = await signInWithPopup(firebaseAuth, fireProvider);
+            const idToken = await result.user.getIdToken();
+
+            // Pass to NextAuth to establish local session
+            await signIn("credentials", {
+                idToken,
+                redirect: true,
+                callbackUrl: "/dashboard"
+            });
+        } catch (error) {
+            console.error("Auth Failure:", error);
+            alert("Login failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
