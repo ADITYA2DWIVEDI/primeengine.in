@@ -1,50 +1,33 @@
-
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
-import GitHub from "next-auth/providers/github"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/db"
+import { authConfig } from "./auth.config"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    ...authConfig,
     adapter: PrismaAdapter(prisma),
-    providers: [
-        Google({
-            allowDangerousEmailAccountLinking: true,
-        }),
-        GitHub({
-            clientId: process.env.AUTH_GITHUB_ID,
-            clientSecret: process.env.AUTH_GITHUB_SECRET,
-            allowDangerousEmailAccountLinking: true,
-            authorization: {
-                params: {
-                    scope: "read:user user:email repo",
-                },
-            },
-        })
-    ],
+    session: { strategy: "jwt" }, // Force JWT strategy for edge compatibility mix
     callbacks: {
-        async session({ session, user }) {
-            const account = await prisma.account.findFirst({
-                where: { userId: user.id, provider: "github" }
-            })
+        ...authConfig.callbacks,
+        async session({ session, token, user }) {
+            // Re-implement the DB session enrichment here if needed, or rely on JWT
+            if (session.user && token) {
+                // @ts-ignore
+                session.user.id = token.sub;
+                // @ts-ignore
+                session.user.provider = token.provider;
 
-            if (session.user) {
-                // @ts-ignore
-                session.user.id = user.id;
-                // @ts-ignore
-                session.user.isPro = user.isPro;
-                if (account && account.access_token) {
-                    // @ts-ignore
-                    session.user.githubAccessToken = account.access_token;
-                }
+                // Fetch extra data from DB if critical and not on edge
+                // For now, we rely on JWT to avoid the circular dep or size issue in middleware
             }
+
+            // Re-adding the GitHub token logic if possible from token
+            if (token && token.accessToken) {
+                // @ts-ignore
+                session.user.githubAccessToken = token.accessToken;
+            }
+
             return session
-        },
-        async jwt({ token, account }) {
-            if (account) {
-                token.accessToken = account.access_token
-            }
-            return token
         }
     }
 })

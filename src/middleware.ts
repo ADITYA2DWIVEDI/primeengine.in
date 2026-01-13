@@ -1,26 +1,7 @@
-import { auth } from "@/auth";
-import { NextResponse } from "next/server";
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
 
-export default auth((req) => {
-    const isLoggedIn = !!req.auth;
-    const { pathname } = req.nextUrl;
-
-    // 1. Redirect logged-in users away from auth routes
-    if (pathname.startsWith("/login")) {
-        if (isLoggedIn) {
-            return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
-        }
-        return;
-    }
-
-    // 2. Protect private routes
-    const protectedRoutes = ["/dashboard", "/builder"];
-    const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-
-    if (isProtectedRoute && !isLoggedIn) {
-        return NextResponse.redirect(new URL("/login", req.nextUrl));
-    }
-});
+export default NextAuth(authConfig).auth;
 
 export const config = {
     // Match all request paths except for:
