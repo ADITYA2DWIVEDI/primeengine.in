@@ -191,88 +191,155 @@ export default function BuilderPage() {
                                                 className="bg-black hover:bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                                             >
                                                 <Github className="w-4 h-4" />
-                                                Login to Deploy
+                                                {loading ? (
+                                                    <>
+                                                        <Sparkles className="w-5 h-5 animate-spin" />
+                                                        Generating Magic...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Sparkles className="w-5 h-5 group-hover:text-white transition-colors" />
+                                                        Generate Website
+                                                    </>
+                                                )}
+                                            </button>
+                    
+                    {generatedCode && (
+                                            <div className="p-4 bg-green-50 border border-green-100 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2">
+                                                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                                                    <Check className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-semibold text-green-800 text-sm">Generation Complete</h4>
+                                                    <p className="text-xs text-green-600">Ready to deploy.</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                </div>
+
+                                <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+                                    <p className="text-xs text-center text-slate-400">
+                                        Powered by <span className="font-bold text-slate-600">Prime Engine AI</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Preview Area */}
+                            <div className="flex-1 flex flex-col bg-slate-50/50 relative overflow-hidden">
+                                {/* Decorative Blobs */}
+                                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-solar-red/5 rounded-full blur-3xl pointer-events-none mix-blend-multiply opacity-70 animate-pulse" />
+                                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-solar-yellow/5 rounded-full blur-3xl pointer-events-none mix-blend-multiply opacity-70 animate-pulse delay-700" />
+
+                                <header className="h-16 border-b border-white/20 bg-white/80 backdrop-blur-xl flex items-center justify-between px-6 shadow-sm z-20">
+                                    <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg border border-slate-200/50">
+                                        <button
+                                            onClick={() => setView("preview")}
+                                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-shadow ${view === "preview" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-900"}`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <Monitor className="w-4 h-4" />
+                                                Preview
+                                            </div>
+                                        </button>
+                                        <button
+                                            onClick={() => setView("code")}
+                                            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-shadow ${view === "code" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-900"}`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <Code className="w-4 h-4" />
+                                                Code
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    {!session?.user ? (
+                                        <button
+                                            onClick={() => signIn('github')}
+                                            className="bg-black hover:bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                        >
+                                            <Github className="w-4 h-4" />
+                                            Login to Deploy
+                                        </button>
+                                    ) : (
+                                        // @ts-ignore
+                                        !session.user.githubAccessToken ? (
+                                            <button
+                                                onClick={() => signIn('github')}
+                                                className="bg-[#24292e] hover:bg-[#1b1f23] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                            >
+                                                <Github className="w-4 h-4" />
+                                                Connect GitHub
                                             </button>
                                         ) : (
-                                            // @ts-ignore
-                                            !session.user.githubAccessToken ? (
-                                                <button
-                                                    onClick={() => signIn('github')}
-                                                    className="bg-[#24292e] hover:bg-[#1b1f23] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                                                >
-                                                    <Github className="w-4 h-4" />
-                                                    Connect GitHub
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={handleDeploy}
-                                                    disabled={deploying || !generatedCode}
-                                                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                                                >
-                                                    {deploying ? (
-                                                        <>
-                                                            <Sparkles className="w-4 h-4 animate-spin" />
-                                                            Pushing...
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Play className="w-4 h-4" />
-                                                            Deploy
-                                                        </>
-                                                    )}
-                                                </button>
-                                            )
-                                        )}
-                                    </header>
+                                            <button
+                                                onClick={handleDeploy}
+                                                disabled={deploying || !generatedCode}
+                                                className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                            >
+                                                {deploying ? (
+                                                    <>
+                                                        <Sparkles className="w-4 h-4 animate-spin" />
+                                                        Pushing...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Play className="w-4 h-4" />
+                                                        Deploy
+                                                    </>
+                                                )}
+                                            </button>
+                                        )
+                                    )}
+                                </header>
 
-                                    {deployResult && (
-                                        <div className="absolute top-20 right-6 z-50 p-4 bg-white rounded-xl shadow-2xl border border-green-100 w-80 animate-in slide-in-from-top-4">
-                                            <div className="flex items-start justify-between mb-2">
-                                                <h3 className="font-bold text-green-600 flex items-center gap-2">
-                                                    <Check className="w-5 h-5" />
-                                                    Deployed Successfully!
-                                                </h3>
-                                                <button onClick={() => setDeployResult(null)}><X className="w-4 h-4 text-slate-400" /></button>
+                                {deployResult && (
+                                    <div className="absolute top-20 right-6 z-50 p-4 bg-white rounded-xl shadow-2xl border border-green-100 w-80 animate-in slide-in-from-top-4">
+                                        <div className="flex items-start justify-between mb-2">
+                                            <h3 className="font-bold text-green-600 flex items-center gap-2">
+                                                <Check className="w-5 h-5" />
+                                                Deployed Successfully!
+                                            </h3>
+                                            <button onClick={() => setDeployResult(null)}><X className="w-4 h-4 text-slate-400" /></button>
+                                        </div>
+                                        <p className="text-sm text-slate-600 mb-4">Your app has been pushed to GitHub.</p>
+                                        <div className="space-y-2">
+                                            <a href={deployResult.repoUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors">
+                                                View GitHub Repo
+                                            </a>
+                                            <a href={deployResult.deployUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-black hover:bg-zinc-800 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                                <svg className="w-4 h-4 text-white" viewBox="0 0 1155 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M577.344 0L1154.69 1000H0L577.344 0Z" />
+                                                </svg>
+                                                Deploy to Vercel
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Main Preview Content */}
+                                <div className="flex-1 bg-slate-50/50 p-8 flex items-center justify-center overflow-auto relative z-10">
+                                    {!generatedCode && !loading && (
+                                        <div className="text-center max-w-md text-slate-400">
+                                            <div className="w-16 h-16 bg-white border border-slate-200 rounded-full mx-auto flex items-center justify-center mb-4 shadow-sm">
+                                                <Monitor className="w-8 h-8 text-slate-300" />
                                             </div>
-                                            <p className="text-sm text-slate-600 mb-4">Your app has been pushed to GitHub.</p>
-                                            <div className="space-y-2">
-                                                <a href={deployResult.repoUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors">
-                                                    View GitHub Repo
-                                                </a>
-                                                <a href={deployResult.deployUrl} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-black hover:bg-zinc-800 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                                                    <svg className="w-4 h-4 text-white" viewBox="0 0 1155 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M577.344 0L1154.69 1000H0L577.344 0Z" />
-                                                    </svg>
-                                                    Deploy to Vercel
-                                                </a>
-                                            </div>
+                                            <h3 className="text-lg font-medium text-slate-600 mb-1">Ready to build</h3>
+                                            <p>Enter a prompt on the left to generate your React application.</p>
                                         </div>
                                     )}
 
-                                    {/* Main Preview Content */}
-                                    <div className="flex-1 bg-slate-50/50 p-8 flex items-center justify-center overflow-auto relative z-10">
-                                        {!generatedCode && !loading && (
-                                            <div className="text-center max-w-md text-slate-400">
-                                                <div className="w-16 h-16 bg-white border border-slate-200 rounded-full mx-auto flex items-center justify-center mb-4 shadow-sm">
-                                                    <Monitor className="w-8 h-8 text-slate-300" />
-                                                </div>
-                                                <h3 className="text-lg font-medium text-slate-600 mb-1">Ready to build</h3>
-                                                <p>Enter a prompt on the left to generate your React application.</p>
-                                            </div>
-                                        )}
+                                    {loading && (
+                                        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-20 flex flex-col items-center justify-center">
+                                            <div className="w-16 h-16 border-4 border-solar-orange/30 border-t-solar-orange rounded-full animate-spin"></div>
+                                            <p className="mt-4 font-medium text-solar-orange animate-pulse">Designing your app...</p>
+                                        </div>
+                                    )}
 
-                                        {loading && (
-                                            <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-20 flex flex-col items-center justify-center">
-                                                <div className="w-16 h-16 border-4 border-solar-orange/30 border-t-solar-orange rounded-full animate-spin"></div>
-                                                <p className="mt-4 font-medium text-solar-orange animate-pulse">Designing your app...</p>
-                                            </div>
-                                        )}
-
-                                        {generatedCode && (
-                                            <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200 relative ring-1 ring-black/5">
-                                                {view === "preview" ? (
-                                                    <iframe
-                                                        srcDoc={`
+                                    {generatedCode && (
+                                        <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200 relative ring-1 ring-black/5">
+                                            {view === "preview" ? (
+                                                <iframe
+                                                    srcDoc={`
                                       <!DOCTYPE html>
                                       <html>
                                         <head>
@@ -303,20 +370,21 @@ export default function BuilderPage() {
                                         </body>
                                       </html>
                                     `}
-                                                        className="w-full h-full"
-                                                        title="Preview"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full overflow-auto bg-[#1e1e1e] p-4">
-                                                        <pre className="text-sm font-mono text-zinc-300">
-                                                            {generatedCode}
-                                                        </pre>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
+                                                    className="w-full h-full"
+                                                    title="Preview"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full overflow-auto bg-[#1e1e1e] p-4">
+                                                    <pre className="text-sm font-mono text-zinc-300">
+                                                        {generatedCode}
+                                                    </pre>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            );
+                        </div>
+                        );
 }
+                        ```
