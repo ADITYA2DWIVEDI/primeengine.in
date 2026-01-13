@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Sparkles, Code, Monitor, Play, Check, X } from "lucide-react";
+import { ArrowLeft, Sparkles, Code, Monitor, Play, Check, X, Github } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession, signIn } from "next-auth/react";
 
 export default function BuilderPage() {
     const router = useRouter();
+    const { data: session } = useSession();
     const [prompt, setPrompt] = useState("");
     const [generatedCode, setGeneratedCode] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -94,23 +96,44 @@ export default function BuilderPage() {
                     </button>
                 </div>
 
-                <button
-                    onClick={handleDeploy}
-                    disabled={deploying || !generatedCode}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                >
-                    {deploying ? (
-                        <>
-                            <Sparkles className="w-4 h-4 animate-spin" />
-                            Pushing...
-                        </>
+                {!session?.user ? (
+                    <button
+                        onClick={() => signIn('github')}
+                        className="bg-black hover:bg-zinc-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                    >
+                        <Github className="w-4 h-4" />
+                        Login to Deploy
+                    </button>
+                ) : (
+                    // @ts-ignore
+                    !session.user.githubAccessToken ? (
+                        <button
+                            onClick={() => signIn('github')}
+                            className="bg-[#24292e] hover:bg-[#1b1f23] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                        >
+                            <Github className="w-4 h-4" />
+                            Connect GitHub
+                        </button>
                     ) : (
-                        <>
-                            <Play className="w-4 h-4" />
-                            Deploy
-                        </>
-                    )}
-                </button>
+                        <button
+                            onClick={handleDeploy}
+                            disabled={deploying || !generatedCode}
+                            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                        >
+                            {deploying ? (
+                                <>
+                                    <Sparkles className="w-4 h-4 animate-spin" />
+                                    Pushing...
+                                </>
+                            ) : (
+                                <>
+                                    <Play className="w-4 h-4" />
+                                    Deploy
+                                </>
+                            )}
+                        </button>
+                    )
+                )}
             </header>
 
             {deployResult && (
