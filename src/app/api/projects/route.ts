@@ -2,16 +2,37 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { orchestrateGeneration, iterateUpdate } from "@/lib/ai-engine";
 
+import { auth } from "@/auth";
+
 export async function POST(req: Request) {
     try {
-        const { prompt, name, userId } = await req.json();
+        const { prompt, name } = await req.json();
+        const session = await auth();
+        let userId = session?.user?.id;
+
+        // Fallback for demo/dev mode or unauthenticated testing
+        if (!userId) {
+            // Check for existing "demo-user" or create one
+            let demoUser = await prisma.user.findUnique({ where: { email: "demo@prime.engine" } });
+            if (!demoUser) {
+                demoUser = await prisma.user.create({
+                    data: {
+                        id: "demo-user",
+                        email: "demo@prime.engine",
+                        name: "Architect",
+                        isPro: true
+                    }
+                });
+            }
+            userId = demoUser.id;
+        }
 
         // 1. Create the project record
         const project = await prisma.project.create({
             data: {
                 name: name || "New Project",
                 prompt,
-                userId: userId || "default-user",
+                userId: userId,
             },
         });
 
@@ -26,7 +47,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, projectId: project.id });
     } catch (error) {
         console.error("Project generation error:", error);
-        return NextResponse.json({ error: "Failed to generate project" }, { status: 500 });
+        return NextResponse.json({ error: "Failed to generate project: " + (error as any).message }, { status: 500 });
     }
 }
 
