@@ -4,12 +4,53 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "");
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+function safeParseJSON(text: string) {
+    try {
+        // 1. Try direct parse
+        return JSON.parse(text);
+    } catch (e) {
+        // 2. Try extracting from code blocks
+        try {
+            const match = text.match(/```json([\s\S]*?)```/);
+            if (match) return JSON.parse(match[1]);
+        } catch (e2) {
+            // 3. Last resort: Find first { or [ and last } or ]
+            try {
+                const firstOpen = text.indexOf('{');
+                const firstArray = text.indexOf('[');
+                let start = -1;
+                if (firstOpen > -1 && firstArray > -1) start = Math.min(firstOpen, firstArray);
+                else if (firstOpen > -1) start = firstOpen;
+                else if (firstArray > -1) start = firstArray;
+
+                const lastClose = text.lastIndexOf('}');
+                const lastArray = text.lastIndexOf(']');
+                let end = -1;
+                if (lastClose > -1 && lastArray > -1) end = Math.max(lastClose, lastArray);
+                else if (lastClose > -1) end = lastClose;
+                else if (lastArray > -1) end = lastArray;
+
+                if (start > -1 && end > -1) {
+                    return JSON.parse(text.substring(start, end + 1));
+                }
+            } catch (e3) {
+                console.error("JSON Parse Failed hard:", text);
+            }
+        }
+    }
+    throw new Error("Failed to parse AI response as JSON");
+}
+
 export type GenerationState = "schema" | "components" | "pages" | "completed";
 
 export async function orchestrateGeneration(projectId: string, prompt: string) {
     try {
+        console.log(`[AI] Starting generation for project ${projectId} with prompt: ${prompt}`);
+
         // Step 1: Generate Entities/Schema
         const entities = await generateSchema(prompt);
+        // ... (rest of logic remains same, just ensuring calls use safeParse)
+
         for (const entity of entities) {
             await prisma.entity.create({
                 data: {
@@ -54,7 +95,7 @@ export async function orchestrateGeneration(projectId: string, prompt: string) {
 
 export async function iterateUpdate(projectId: string, userMessage: string, activeFile?: any) {
     try {
-        // 1. Fetch current project state
+        // ... (keeping fetch logic)
         const project = await prisma.project.findUnique({
             where: { id: projectId },
             include: {
@@ -113,8 +154,9 @@ export async function iterateUpdate(projectId: string, userMessage: string, acti
 
         const result = await model.generateContent(aiPrompt);
         const text = result.response.text();
-        const cleanJson = text.replace(/```json|```/g, "").trim();
-        const { message, actions } = JSON.parse(cleanJson);
+        console.log("[AI Update Output]:", text); // Log raw output
+
+        const { message, actions } = safeParseJSON(text);
 
         // 4. Apply updates
         for (const update of actions) {
@@ -122,7 +164,7 @@ export async function iterateUpdate(projectId: string, userMessage: string, acti
                 await prisma.page.upsert({
                     where: {
                         projectId_name: { projectId, name: update.name }
-                    } as any, // Using composite unique if available, else simple match
+                    } as any,
                     update: { code: update.code, route: update.route },
                     create: { name: update.name, code: update.code, route: update.route, projectId }
                 });
@@ -148,6 +190,7 @@ export async function iterateUpdate(projectId: string, userMessage: string, acti
         throw error;
     }
 }
+
 async function generateSchema(prompt: string) {
     const aiPrompt = `
         You are an expert database architect. Given the following user prompt for a web application, generate a database schema in JSON format.
@@ -163,8 +206,8 @@ async function generateSchema(prompt: string) {
 
     const result = await model.generateContent(aiPrompt);
     const text = result.response.text();
-    const cleanJson = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(cleanJson);
+    console.log("[AI Schema Output]:", text);
+    return safeParseJSON(text);
 }
 
 async function generateComponents(prompt: string, entities: any[]) {
@@ -182,8 +225,8 @@ async function generateComponents(prompt: string, entities: any[]) {
 
     const result = await model.generateContent(aiPrompt);
     const text = result.response.text();
-    const cleanJson = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(cleanJson);
+    console.log("[AI Components Output]:", text);
+    return safeParseJSON(text);
 }
 
 async function generatePages(prompt: string, entities: any[], components: any[]) {
@@ -202,6 +245,6 @@ async function generatePages(prompt: string, entities: any[], components: any[])
 
     const result = await model.generateContent(aiPrompt);
     const text = result.response.text();
-    const cleanJson = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(cleanJson);
+    console.log("[AI Pages Output]:", text);
+    return safeParseJSON(text);
 }
