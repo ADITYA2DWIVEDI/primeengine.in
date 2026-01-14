@@ -14,25 +14,32 @@
   :root {
     /* Light mode */
     --background: #ffffff;
-    --foreground: #2d2420;
-    --glass-bg: rgba(255, 148, 77, 0.03);
-    --glass-border: rgba(255, 77, 77, 0.08);
-    --premium-shadow: 0 12px 40px -10px rgba(45, 36, 32, 0.1);
+    --foreground: #0a0a0a;
+    --glass-bg: rgba(255, 148, 77, 0.05);
+    --glass-border: rgba(0, 0, 0, 0.05);
+    --premium-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.1);
   }
 
   .dark {
-    /* Enforce Light mode even in dark class */
-    --background: #ffffff;
-    --foreground: #2d2420;
+    --background: #050505;
+    --foreground: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --premium-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .solar {
+    --background: #030100;
+    --foreground: #ffffff;
     --glass-bg: rgba(255, 148, 77, 0.03);
-    --glass-border: rgba(255, 77, 77, 0.08);
-    --premium-shadow: 0 12px 40px -10px rgba(45, 36, 32, 0.1);
+    --glass-border: rgba(255, 77, 77, 0.1);
+    --premium-shadow: 0 0 30px -5px rgba(255, 77, 77, 0.15);
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
-    @apply antialiased selection:bg-solar-red/30 transition-colors duration-500;
+    @apply antialiased selection:bg-solar-red/30 transition-colors duration-500 font-sans;
   }
 }
 

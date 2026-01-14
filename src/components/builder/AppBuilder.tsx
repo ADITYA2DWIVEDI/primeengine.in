@@ -279,7 +279,12 @@ export default function AppBuilder({
     };
 
     return (
-        <div className="flex h-screen bg-background text-foreground font-sans overflow-hidden transition-colors duration-500">
+        <div className={cn("flex h-screen bg-background text-foreground font-sans overflow-hidden transition-colors duration-500", theme)}>
+            {/* Background Ambient Mesh */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-solar-red/10 blur-[120px] animate-float-slow" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-solar-orange/10 blur-[120px] animate-float-slower" />
+            </div>
             {/* Mobile Sidebar Toggle */}
             <AnimatePresence>
                 {!isSidebarOpen && (
@@ -316,7 +321,7 @@ export default function AppBuilder({
                     width: isSidebarOpen ? (isMobile ? "85%" : "420px") : "0px",
                 }}
                 className={cn(
-                    "fixed lg:relative z-50 h-full border-r border-foreground/5 flex flex-col bg-background/80 backdrop-blur-3xl overflow-hidden shadow-2xl transition-colors duration-500",
+                    "fixed lg:relative z-50 h-full border-r border-foreground/5 flex flex-col bg-background/20 backdrop-blur-3xl overflow-hidden shadow-2xl transition-colors duration-500",
                     !isSidebarOpen && "pointer-events-none lg:pointer-events-auto"
                 )}
             >
@@ -498,8 +503,8 @@ export default function AppBuilder({
             </motion.aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 flex flex-col relative bg-background overflow-hidden transition-colors duration-500">
-                <header className="h-16 md:h-20 border-b border-foreground/5 glass flex items-center justify-between px-6 z-20">
+            <main className="flex-1 flex flex-col relative z-10 bg-transparent overflow-hidden transition-colors duration-500">
+                <header className="h-16 md:h-20 border-b border-foreground/5 bg-background/30 backdrop-blur-xl flex items-center justify-between px-6 z-20">
                     <div className="flex items-center gap-4">
                         {!isSidebarOpen && (
                             <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-foreground/5 rounded-lg transition-all hidden lg:block">
