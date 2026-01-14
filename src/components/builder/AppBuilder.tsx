@@ -266,8 +266,12 @@ export default function AppBuilder({
             const data = await res.json();
             if (data.repoUrl) {
                 window.open(data.repoUrl, "_blank");
+                if (data.vercelUrl) {
+                    addLog("Opening Vercel Deployment...");
+                    window.open(data.vercelUrl, "_blank");
+                }
                 addLog(`Success! Repo created: ${data.repoUrl}`);
-                alert(`Repository Created Successfully!\n${data.repoUrl}`);
+                alert(`Repository Created Successfully!\nCheck your tabs to complete Vercel deployment.`);
             } else {
                 throw new Error(data.error);
             }

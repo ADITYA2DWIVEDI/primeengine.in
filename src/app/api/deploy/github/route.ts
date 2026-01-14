@@ -71,9 +71,10 @@ export async function POST(req: Request) {
         // @ts-ignore
         const repoUrl = await createRepoAndPush(session.user.githubAccessToken, repoName, files);
 
-        // Future: Trigger Vercel Deployment here using repoUrl
+        // Vercel Deploy Link
+        const vercelUrl = `https://vercel.com/new/clone?repository-url=${encodeURIComponent(repoUrl + ".git")}`;
 
-        return NextResponse.json({ success: true, repoUrl });
+        return NextResponse.json({ success: true, repoUrl, vercelUrl });
     } catch (err: any) {
         console.error("GitHub API Error:", err);
         return NextResponse.json({ error: err.message }, { status: 500 });
