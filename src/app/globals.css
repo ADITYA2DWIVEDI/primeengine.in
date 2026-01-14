@@ -92,6 +92,15 @@
     }
   }
 
+  @keyframes mascot-float {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-15px); }
+  }
+
+  .animate-float {
+    animation: mascot-float 4s ease-in-out infinite;
+  }
+
   .animate-float-slow {
     animation: float 15s ease-in-out infinite;
   }

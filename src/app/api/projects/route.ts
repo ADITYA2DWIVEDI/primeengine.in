@@ -32,12 +32,12 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
     try {
-        const { projectId, message } = await req.json();
+        const { projectId, message, activeFile } = await req.json();
         if (!projectId || !message) {
             return NextResponse.json({ error: "Missing projectId or message" }, { status: 400 });
         }
 
-        const result = await iterateUpdate(projectId, message);
+        const result = await iterateUpdate(projectId, message, activeFile);
         return NextResponse.json(result);
     } catch (error) {
         console.error("Project update error:", error);

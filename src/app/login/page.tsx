@@ -115,10 +115,20 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                {/* Center/Divider Area (Desktop) - Could act as the 3D mascot area */}
-                <div className="hidden md:flex w-[80px] items-center justify-center relative z-10">
+                {/* Center/Divider Area (Desktop) - 3D Mascot Integration */}
+                <div className="hidden md:flex w-[120px] items-center justify-center relative z-10">
                     <div className="absolute inset-y-8 w-px bg-gradient-to-b from-transparent via-slate-200 to-transparent left-1/2"></div>
-                    <div className="w-12 h-12 bg-white rounded-full shadow-lg border border-slate-100 flex items-center justify-center relative z-20">
+                    
+                    {/* Floating Mascot */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 animate-float">
+                        <img 
+                            src="/images/mascot.png" 
+                            alt="Prime Mascot" 
+                            className="w-full h-full object-contain drop-shadow-2xl"
+                        />
+                    </div>
+
+                    <div className="w-12 h-12 bg-white rounded-full shadow-lg border border-slate-100 flex items-center justify-center relative z-20 mt-32">
                         <span className="text-solar-orange font-bold text-lg">OR</span>
                     </div>
                 </div>

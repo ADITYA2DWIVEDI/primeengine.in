@@ -1,0 +1,80 @@
+
+> prime-engine@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Γ£ö Generated Prisma Client (v6.19.1) to .\node_modules\@prisma\client in 124ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+ΓÜá `eslint` configuration in next.config.ts is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
+ΓÜá Invalid next.config.ts options detected: 
+ΓÜá     Unrecognized key(s) in object: 'eslint'
+ΓÜá See more info here: https://nextjs.org/docs/messages/invalid-next-config
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.production.local, .env.local, .env
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./node_modules/framer-motion-3d/dist/es/render/motion.mjs:2:1
+Export createRendererMotionComponent doesn't exist in target module
+  1 | "use client";
+> 2 | import { makeUseVisualState, animations, createRendererMotionComponent } from 'framer-motion';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 | import { createRenderState, createVisualElement } from './create-visual-element.mjs';
+  4 | import { useRender } from './use-render.mjs';
+  5 | import { scrapeMotionValuesFromProps } from './utils/scrape-motion-value.mjs';
+
+The export createRendererMotionComponent was not found in module [project]/node_modules/framer-motion/dist/es/index.mjs [app-client] (ecmascript).
+Did you mean to import createRenderBatcher?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./node_modules/framer-motion-3d/dist/es/render/motion.mjs [Client Component Browser]
+    ./src/components/landing/VibeCodeShowcase.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/framer-motion-3d/dist/es/render/motion.mjs [Client Component SSR]
+    ./src/components/landing/VibeCodeShowcase.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+./node_modules/framer-motion-3d/dist/es/render/motion.mjs:2:1
+Export createRendererMotionComponent doesn't exist in target module
+  1 | "use client";
+> 2 | import { makeUseVisualState, animations, createRendererMotionComponent } from 'framer-motion';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 | import { createRenderState, createVisualElement } from './create-visual-element.mjs';
+  4 | import { useRender } from './use-render.mjs';
+  5 | import { scrapeMotionValuesFromProps } from './utils/scrape-motion-value.mjs';
+
+The export createRendererMotionComponent was not found in module [project]/node_modules/framer-motion/dist/es/index.mjs [app-ssr] (ecmascript).
+Did you mean to import createRenderBatcher?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./node_modules/framer-motion-3d/dist/es/render/motion.mjs [Client Component Browser]
+    ./src/components/landing/VibeCodeShowcase.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./node_modules/framer-motion-3d/dist/es/render/motion.mjs [Client Component SSR]
+    ./src/components/landing/VibeCodeShowcase.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+    at ignore-listed frames

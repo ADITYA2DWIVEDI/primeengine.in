@@ -8,53 +8,54 @@ import AppBuilder from "@/components/builder/AppBuilder";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { SessionProvider } from "next-auth/react";
 import { useTheme, ThemeProvider } from "@/components/ThemeProvider";
-// import { ParticleBackground } from "@/components/ParticleBackground";
-// import { FeaturesSection } from "@/components/FeaturesSection";
-// import { HowItWorksSection } from "@/components/HowItWorksSection";
-// import { FloatingCard } from "@/components/FloatingCard";
+import VibeCodeShowcase from "@/components/landing/VibeCodeShowcase";
 
 // Force dynamic rendering to avoid SSR issues
 export const dynamic = 'force-dynamic';
 
 const NavbarContent = () => {
   const { data: session } = useSession();
-  // const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8 md:py-6">
-      <div className="max-w-7xl mx-auto flex items-center justify-between glass rounded-[2rem] px-6 py-4 md:px-8 shadow-2xl">
+      <div className="max-w-7xl mx-auto flex items-center justify-between glass rounded-[2rem] px-6 py-4 md:px-8 shadow-2xl backdrop-blur-xl bg-black/40 border border-white/5">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Prime Engine" className="w-10 h-10 object-contain" />
-          <span className="text-lg md:text-xl font-bold tracking-tight uppercase">Prime Engine</span>
+          <div className="w-8 h-8 rounded-lg bg-solar-gradient flex items-center justify-center p-1.5">
+            <img src="/logo.png" alt="" className="w-full h-full object-contain brightness-0 invert" />
+          </div>
+          <span className="text-lg md:text-xl font-bold tracking-tight uppercase text-white">Prime Engine</span>
         </div>
 
-        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-foreground/70">
-          <a href="/" className="hover:text-foreground transition-colors">Product</a>
-          <a href="/showcase" className="hover:text-foreground transition-colors">Showcase</a>
-          <a href="/docs" className="hover:text-foreground transition-colors">Documentation</a>
-          <div className="w-[1px] h-4 bg-foreground/10" />
+        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-white/70">
+          <a href="/" className="hover:text-white transition-colors">Product</a>
+          <a href="/showcase" className="hover:text-white transition-colors">Showcase</a>
+          <div className="w-[1px] h-4 bg-white/10" />
 
           {session ? (
             <div className="flex items-center gap-4">
-              <span className="text-foreground font-bold">{session.user?.name}</span>
+              <span className="text-white font-bold">{session.user?.name}</span>
               {/* @ts-ignore */}
               {session.user?.isPro && <span className="px-2 py-0.5 bg-solar-gold text-black text-[9px] font-black uppercase rounded">PRO</span>}
-              <button onClick={() => signOut()} className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log out</button>
+              <button onClick={() => signOut()} className="px-5 py-2 rounded-full border border-white/10 hover:bg-white/5 transition-all text-white">Log out</button>
+              <a href="/builder" className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform">
+                Open Builder
+              </a>
             </div>
           ) : (
-            <a href="/login" className="px-5 py-2 rounded-full glass hover:bg-foreground/5 transition-all">Log in</a>
+            <>
+              <a href="/login" className="px-5 py-2 rounded-full border border-white/10 hover:bg-white/5 transition-all text-white">Log in</a>
+              <a
+                href="/login"
+                className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform"
+              >
+                Start Building
+              </a>
+            </>
           )}
-
-          <a
-            href="/login"
-            className="px-6 py-2 rounded-full bg-solar-gradient text-black font-bold hover:scale-105 transition-transform"
-          >
-            Start Building
-          </a>
         </div>
 
-        <div className="lg:hidden flex items-center gap-4">
+        <div className="lg:hidden flex items-center gap-4 text-white">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2">
             {isMenuOpen ? <X /> : <Menu />}
           </button>
@@ -67,22 +68,16 @@ const NavbarContent = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden absolute top-full left-4 right-4 mt-4 glass rounded-[2rem] p-8 flex flex-col gap-6 shadow-2xl"
+            className="lg:hidden absolute top-full left-4 right-4 mt-4 glass rounded-[2rem] p-8 flex flex-col gap-6 shadow-2xl bg-[#0a0a0a] border border-white/10"
           >
-            <a href="/" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Product</a>
-            <a href="/showcase" className="text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Showcase</a>
+            <a href="/" className="text-white text-xl font-bold uppercase tracking-widest text-center" onClick={() => setIsMenuOpen(false)}>Product</a>
+            <hr className="border-white/5" />
+
             {session ? (
-              <button onClick={() => signOut()} className="text-xl font-bold uppercase tracking-widest text-center text-red-500">Log out</button>
+              <a href="/builder" className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest text-center">Open Builder</a>
             ) : (
-              <button onClick={() => signIn("google")} className="text-xl font-bold uppercase tracking-widest text-center">Log in</button>
+              <a href="/login" className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest text-center">Start Building</a>
             )}
-            <hr className="border-foreground/5" />
-            <button
-              onClick={() => document.getElementById('prompt-input')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full py-5 rounded-2xl bg-solar-gradient text-black font-black uppercase tracking-widest"
-            >
-              Start Building
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -104,13 +99,6 @@ const Footnote = () => (
   </div>
 );
 
-const AnimatedOrbs = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-60">
-    <div className="absolute top-1/4 -left-24 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-solar-red/10 blur-[80px] rounded-full animate-float-slow" />
-    <div className="absolute bottom-1/4 -right-24 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-solar-orange/10 blur-[80px] rounded-full animate-float-slower" />
-  </div>
-);
-
 export default function LandingPage() {
   return (
     <SessionProvider>
@@ -128,94 +116,80 @@ function LandingPageContent() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden flex flex-col items-center">
+    <main className="relative min-h-screen overflow-hidden flex flex-col bg-[#050505] text-white selection:bg-solar-orange/30">
       <Navbar />
-      <AnimatedOrbs />
-      {/* <ParticleBackground /> */}
 
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,148,77,0.05),_rgba(0,0,0,0)_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay" />
 
       {/* Hero Content */}
-      <div className="relative z-10 w-full max-w-7xl px-6 md:px-8 pt-40 md:pt-56 pb-20 text-center space-y-12 md:space-y-16">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="space-y-6"
-        >
+      <div className="relative z-10 w-full pt-32 md:pt-40 pb-20 flex flex-col items-center">
+
+        {/* Text Layer */}
+        <div className="max-w-7xl mx-auto px-6 md:px-8 text-center space-y-8 relative z-20 mb-[-100px] md:mb-[-150px]">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass text-[10px] font-black italic text-solar-orange border-solar-orange/30 uppercase tracking-[0.2em]"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="space-y-6"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            AI Superpowers
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.2em] text-solar-orange mb-6">
+              <Sparkles className="w-3.5 h-3.5" />
+              v2.0 Neural Engine Live
+            </div>
+
+            <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase leading-[0.9] md:leading-[0.85] text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+              Build with <br />
+              <span className="text-solar-gradient">Vibration.</span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto font-medium leading-relaxed">
+              Describe your app. Watch it build itself. Connected to real backend infrastructure instantly.
+            </p>
           </motion.div>
+        </div>
 
-          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase leading-[0.85] md:leading-[0.8]">
-            Built with <br />
-            <span className="text-gradient-solar">Magic.</span>
-          </h1>
-
-          <p className="text-lg md:text-2xl text-foreground/40 max-w-3xl mx-auto font-medium tracking-tight">
-            Prime Engine turns your simple words into working apps in seconds.
-            <span className="text-foreground/80 block mt-2">No code. No stress. Just amazing results.</span>
-          </p>
+        {/* 3D Visualization Layer */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 1.5 }}
+          className="w-full max-w-[1400px] mx-auto h-[600px] md:h-[900px] relative z-10 pointer-events-none"
+        >
+          <VibeCodeShowcase />
         </motion.div>
 
-        {/* AI Prompt Input Bar */}
+        {/* AI Prompt Input Bar (Floating over 3D scene bottom) */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ perspective: 1000, rotateX: 2, rotateY: -2 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="relative max-w-3xl mx-auto group w-full cursor-default"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="relative z-30 w-full max-w-2xl px-6 -mt-20 md:-mt-40"
         >
-          <div className="absolute -inset-2 bg-solar-gradient rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-10 group-focus-within:opacity-20 transition-all duration-700" />
-          <div className="relative glass rounded-[2.5rem] p-3 md:p-5 flex flex-col md:flex-row items-center gap-4 md:gap-6 premium-shadow border-white/10 group-focus-within:border-solar-orange/40 transition-all">
-            <div className="hidden md:flex p-4 rounded-2xl bg-white/5 text-solar-yellow">
-              <Wand2 className="w-8 h-8" />
+          <div className="relative group cursor-default">
+            <div className="absolute -inset-1 bg-solar-gradient rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
+            <div className="relative bg-black/80 backdrop-blur-xl rounded-[2.5rem] p-2 pl-6 flex items-center gap-4 border border-white/10 group-focus-within:border-solar-orange/50 transition-all shadow-2xl">
+              <Wand2 className="w-6 h-6 text-solar-orange" />
+              <input
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && prompt.length > 2 && window.location.assign('/login')}
+                placeholder="Ex: A fitness tracker with goals..."
+                className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder:text-white/20 text-lg font-medium h-14"
+              />
+              <button
+                onClick={() => window.location.assign('/login')}
+                className="w-14 h-14 rounded-[2rem] bg-white text-black flex items-center justify-center hover:scale-110 active:scale-95 transition-all"
+              >
+                <ArrowRight className="w-6 h-6" />
+              </button>
             </div>
-            <textarea
-              id="prompt-input"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="What do you want to build today?"
-              className="flex-1 w-full bg-transparent border-none focus:ring-0 text-foreground placeholder:text-foreground/20 text-lg md:text-xl font-medium resize-none py-3 h-14 md:h-14 leading-tight"
-            />
-            <button
-              onClick={() => prompt.length > 5 && setShowBuilder(true)}
-              className={cn(
-                "w-12 h-12 md:w-16 md:h-16 rounded-2xl transition-all duration-500 flex items-center justify-center transform self-end md:self-center",
-                prompt.length > 5
-                  ? "bg-solar-gradient text-black shadow-[0_0_30px_rgba(255,148,77,0.5)] scale-100"
-                  : "bg-white/5 text-foreground/10 scale-90"
-              )}
-            >
-              <ArrowRight className="w-6 h-6 md:w-8 md:h-8 font-black" />
-            </button>
           </div>
         </motion.div>
 
-        {/* Quick Links */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="flex flex-wrap justify-center gap-2 md:gap-4"
-        >
-          {["SaaS Dashboard", "Portfolio", "Real-estate", "Inventory"].map((tmp) => (
-            <button
-              key={tmp}
-              onClick={() => { setPrompt(`Build a ${tmp}`); setShowBuilder(true); }}
-              className="px-4 md:px-6 py-2 md:py-2.5 rounded-full glass text-[9px] md:text-[10px] font-black text-foreground/40 hover:text-foreground uppercase tracking-widest transition-all"
-            >
-              # {tmp}
-            </button>
-          ))}
-        </motion.div>
       </div>
+
 
       {/* Showcase Grid */}
       <section className="relative z-10 w-full max-w-7xl px-6 md:px-8 py-20 md:py-40">

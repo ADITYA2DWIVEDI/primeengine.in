@@ -25,20 +25,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     const decodedToken = await adminAuth.verifyIdToken(idToken);
 
                     if (decodedToken) {
-                        // Upsert user in Prisma
-                        const user = await prisma.user.upsert({
-                            where: { email: decodedToken.email },
-                            update: {
-                                name: decodedToken.name,
-                                image: decodedToken.picture,
-                            },
-                            create: {
-                                email: decodedToken.email!,
-                                name: decodedToken.name,
-                                image: decodedToken.picture,
-                            },
-                        });
-                        return user;
+                        try {
+                            // Upsert user in Prisma
+                            const user = await prisma.user.upsert({
+                                where: { email: decodedToken.email },
+                                update: {
+                                    name: decodedToken.name,
+                                    image: decodedToken.picture,
+                                },
+                                create: {
+                                    email: decodedToken.email!,
+                                    name: decodedToken.name,
+                                    image: decodedToken.picture,
+                                },
+                            });
+                            return user;
+                        } catch (dbError) {
+                            console.error("Prisma Auth Error (Database sync issue?):", dbError);
+                            // Rethrow or return null to trigger NextAuth failure
+                            return null;
+                        }
                     }
                     return null;
                 } catch (error) {

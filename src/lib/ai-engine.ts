@@ -52,7 +52,7 @@ export async function orchestrateGeneration(projectId: string, prompt: string) {
     }
 }
 
-export async function iterateUpdate(projectId: string, userMessage: string) {
+export async function iterateUpdate(projectId: string, userMessage: string, activeFile?: any) {
     try {
         // 1. Fetch current project state
         const project = await prisma.project.findUnique({
@@ -73,44 +73,64 @@ export async function iterateUpdate(projectId: string, userMessage: string) {
         });
 
         // 3. Prepare AI Prompt for iteration
-        const historyContext = project.messages.map((m: any) => `${m.role}: ${m.content}`).join("\n");
-        const aiPrompt = `
-            You are an AI Web App Builder ("Prime Engine") specializing in iterative updates.
-            Current Project Architecture:
-            Entities: ${JSON.stringify(project.entities)}
-            Components: ${JSON.stringify(project.components.map((c: any) => ({ name: c.name, code: c.code })))}
-            Pages: ${JSON.stringify(project.pages.map((p: any) => ({ name: p.name, route: p.route, code: p.code })))}
+        const historyContext = project.messages.slice(-5).map((m: any) => `${m.role}: ${m.content}`).join("\n");
+        const activeFileContext = activeFile ? `\nACTIVE FILE CONTENT: \nFile: ${activeFile.name}\nCode: ${activeFile.code}\n` : "";
 
-            Chat History:
+        const aiPrompt = `
+            You are "Prime Engine", a powerful agentic AI web builder. 
+            User Request: "${userMessage}"
+            
+            ${activeFileContext}
+
+            Project Architecture Overview:
+            Entities: ${JSON.stringify(project.entities)}
+            Components: ${project.components.map(c => c.name).join(", ")}
+            Pages: ${project.pages.map(p => p.name).join(", ")}
+
+            Recent Chat History:
             ${historyContext}
 
-            New Request: "${userMessage}"
+            TASKS:
+            1. Analyze the request and determine which files need updating or creation.
+            2. Generate the necessary code updates.
+            3. Provide a helpful, technical, yet friendly summary of what you've done (in the "message" field). 
 
-            Based on the request, update existing files or create new ones.
-            YOU MUST return a JSON array of actions:
-            [
-                { "type": "page", "name": "...", "route": "...", "code": "..." },
-                { "type": "component", "name": "...", "code": "..." }
-            ]
-            Return ONLY the JSON array. Use Tailwind CSS and lucide-react.
+            CAPABILITIES:
+            - You can create backend API routes by creating a "page" with a route starting with "/api/".
+            - Example: { "type": "page", "name": "users_api", "route": "/api/users", "code": "export async function GET()..." }
+
+            OUTPUT FORMAT (JSON):
+            {
+                "message": "A brief summary of what I did...",
+                "actions": [
+                    { "type": "page", "name": "...", "route": "...", "code": "..." },
+                    { "type": "component", "name": "...", "code": "..." }
+                ]
+            }
+
+            Be precise. Use Tailwind CSS and lucide-react. Return ONLY JSON.
         `;
 
         const result = await model.generateContent(aiPrompt);
         const text = result.response.text();
         const cleanJson = text.replace(/```json|```/g, "").trim();
-        const updates = JSON.parse(cleanJson);
+        const { message, actions } = JSON.parse(cleanJson);
 
         // 4. Apply updates
-        for (const update of updates) {
+        for (const update of actions) {
             if (update.type === "page") {
                 await prisma.page.upsert({
-                    where: { id: (project.pages.find((p: any) => p.name === update.name)?.id) || 'new-page' },
+                    where: {
+                        projectId_name: { projectId, name: update.name }
+                    } as any, // Using composite unique if available, else simple match
                     update: { code: update.code, route: update.route },
                     create: { name: update.name, code: update.code, route: update.route, projectId }
                 });
             } else if (update.type === "component") {
                 await prisma.component.upsert({
-                    where: { id: (project.components.find((c: any) => c.name === update.name)?.id) || 'new-comp' },
+                    where: {
+                        projectId_name: { projectId, name: update.name }
+                    } as any,
                     update: { code: update.code },
                     create: { name: update.name, code: update.code, projectId }
                 });
@@ -119,10 +139,10 @@ export async function iterateUpdate(projectId: string, userMessage: string) {
 
         // 5. Save AI response to history
         await prisma.chatMessage.create({
-            data: { role: "assistant", content: `Updated ${updates.length} files.`, projectId }
+            data: { role: "assistant", content: message || `Updated ${actions.length} files.`, projectId }
         });
 
-        return { success: true, updatesCount: updates.length };
+        return { success: true, message, updatesCount: actions.length };
     } catch (error) {
         console.error("Iteration error:", error);
         throw error;
