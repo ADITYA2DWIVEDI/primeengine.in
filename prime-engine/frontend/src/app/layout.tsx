@@ -1,7 +1,11 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import LayoutWrapper from '@/components/LayoutWrapper'
+import SmoothScroll from '@/components/SmoothScroll'
+import CustomCursor from '@/components/CustomCursor'
+import PageLoader from '@/components/PageLoader'
 import Script from 'next/script'
 
 export const metadata: Metadata = {
@@ -27,9 +31,15 @@ export default function RootLayout({
                     src="https://checkout.razorpay.com/v1/checkout.js"
                     strategy="lazyOnload"
                 />
-                <LayoutWrapper>
-                    {children}
-                </LayoutWrapper>
+                <SmoothScroll>
+                    <PageLoader />
+                    <div className="relative z-50">
+                        <CustomCursor />
+                    </div>
+                    <LayoutWrapper>
+                        {children}
+                    </LayoutWrapper>
+                </SmoothScroll>
                 <Toaster
                     position="top-right"
                     toastOptions={{

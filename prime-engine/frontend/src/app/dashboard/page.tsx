@@ -90,7 +90,14 @@ export default function DashboardPage() {
                     </motion.h1>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-8">
+                    <div className="flex flex-col items-end">
+                        <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-1 italic">Synthesis Fuel</span>
+                        <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-primary-500" />
+                            <span className="text-2xl font-black text-white tracking-tighter">1,000</span>
+                        </div>
+                    </div>
                     <div className="hidden sm:flex p-1 bg-dark-900 border border-white/5 rounded-xl">
                         <button
                             onClick={() => setViewMode('grid')}

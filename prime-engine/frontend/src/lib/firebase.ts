@@ -10,9 +10,12 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
-// Initialize Firebase only if it hasn't been initialized
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
-const auth = getAuth(app)
+// Check if config is valid (at least apiKey)
+const isConfigValid = !!firebaseConfig.apiKey
+
+// Initialize Firebase only if it hasn't been initialized and config is valid
+const app = (getApps().length === 0 && isConfigValid) ? initializeApp(firebaseConfig) : getApps()[0]
+const auth = app ? getAuth(app) : ({} as any)
 const googleProvider = new GoogleAuthProvider()
 
 export { app, auth, googleProvider }

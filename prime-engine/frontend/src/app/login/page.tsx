@@ -1,10 +1,12 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Zap, Mail, Lock, Eye, EyeOff, Loader2, ArrowLeft } from 'lucide-react'
+import { Zap, Mail, Lock, Eye, EyeOff, Loader2, ArrowLeft, CheckCircle2, ArrowRight } from 'lucide-react'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
 import { useAuthStore } from '@/store/authStore'

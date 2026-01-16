@@ -7,6 +7,8 @@ export interface Project {
     prompt?: string
     status: 'draft' | 'generating' | 'ready' | 'deployed'
     deployedUrl?: string
+    canvasState?: any
+    generatedCode?: any
     createdAt: string
     updatedAt: string
 }

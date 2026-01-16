@@ -12,48 +12,44 @@ const openai = new OpenAI({
 
 const generateApp = async (prompt) => {
   try {
-    const systemPrompt = `You are an expert full-stack developer. Generate a complete web application based on the user's description.
+    const systemPrompt = `You are an expert full-stack developer and UI/UX designer. Generate a complete, production-ready web application based on the user's description.
+    
+    IMPORTANT: You must return ONLY a valid JSON object. No markdown, no explanations.
 
-Return a JSON object with the following structure:
-{
-  "name": "App name",
-  "description": "Brief app description",
-  "canvasState": {
-    "pages": [
-      {
-        "id": "unique-id",
-        "name": "Page Name",
-        "route": "/route",
-        "components": [
+    {
+      "name": "App name",
+      "description": "Brief app description",
+      "canvasState": {
+        "pages": [
           {
-            "id": "comp-id",
-            "type": "container|text|button|input|image|navbar|footer|card|form",
-            "props": {},
-            "children": [],
-            "styles": {}
+            "id": "home",
+            "name": "Home",
+            "route": "/",
+            "components": [
+              {
+                "id": "nav-1",
+                "type": "navbar",
+                "props": { "logo": "AppLogo", "links": ["Home", "Features", "About"] },
+                "styles": { "backgroundColor": "#0f172a" }
+              }
+            ]
           }
-        ]
+        ],
+        "theme": {
+          "primary": "#6366f1",
+          "secondary": "#a855f7",
+          "background": "#0f172a",
+          "text": "#f8fafc"
+        }
+      },
+      "code": {
+        "frontend": "A complete React (Next.js) component file content as a single string.",
+        "backend": "A complete Node.js/Express route file content as a single string."
       }
-    ],
-    "theme": {
-      "primaryColor": "#6366f1",
-      "backgroundColor": "#0f172a",
-      "textColor": "#f8fafc"
     }
-  },
-  "code": {
-    "frontend": {
-      "pages": {},
-      "components": {}
-    },
-    "backend": {
-      "routes": {},
-      "models": {}
-    }
-  }
-}
 
-Generate modern, responsive, and visually appealing designs. Use proper semantic HTML and React best practices.`;
+    Components available: navbar, hero, features, contact, footer, login-form, dashboard-grid.
+    Use Tailwind CSS classes in the generated code. Ensure the code is robust and includes imports.`;
 
     let text = '';
 

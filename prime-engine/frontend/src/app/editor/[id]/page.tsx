@@ -15,6 +15,7 @@ import { useProjectStore } from '@/store/projectStore'
 import { projectsAPI } from '@/lib/api'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
+import Canvas from '@/components/Canvas'
 
 const COMPONENT_PALETTE = [
     { id: 'hero', icon: Sparkles, label: 'Hero Section', group: 'Layout' },
@@ -72,6 +73,39 @@ export default function EditorPage() {
             setIsSaving(false)
         }
     }
+
+    const handleGenerate = async () => {
+        if (!prompt) return toast.error('Command required.')
+        setIsSaving(true)
+        try {
+            const response = await projectsAPI.generate(prompt, projectId)
+            updateProject(projectId, { canvasState: response.data.canvasState })
+            toast.success('Synthesis successful.')
+        } catch (error) {
+            toast.error('Synthesis failed.')
+        } finally {
+            setIsSaving(false)
+        }
+    }
+
+    const handleDeploy = async () => {
+        setIsDeploying(true)
+        try {
+            await projectsAPI.deploy(projectId)
+            toast.success('Deployed to Sector 7.')
+        } catch (error) {
+            toast.error('Deployment error.')
+        } finally {
+            setIsDeploying(false)
+        }
+    }
+
+    const getSelectedComponent = () => {
+        if (!selectedId || !currentProject?.canvasState?.pages?.[0]) return null
+        return currentProject.canvasState.pages[0].components.find((c: any) => c.id === selectedId)
+    }
+
+    const selectedComponent = getSelectedComponent()
 
     const getCanvasDimensions = () => {
         switch (viewMode) {
@@ -156,10 +190,12 @@ export default function EditorPage() {
                     </button>
 
                     <button
-                        onClick={() => { }}
-                        className="btn-primary px-8 py-3 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl shadow-primary-500/20"
+                        onClick={handleDeploy}
+                        disabled={isDeploying}
+                        className="btn-primary px-8 py-3 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl shadow-primary-500/20 disabled:opacity-50"
                     >
-                        <Rocket className="w-4 h-4" /> Deploy
+                        {isDeploying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rocket className="w-4 h-4" />}
+                        Deploy
                     </button>
                 </div>
             </header>
@@ -208,8 +244,12 @@ export default function EditorPage() {
                                             placeholder="Describe a tactical evolution for this application..."
                                             className="w-full h-48 bg-dark-900 border border-white/5 rounded-2xl p-4 text-sm text-white placeholder:text-dark-600 focus:border-primary-500/30 transition-all resize-none shadow-inner"
                                         />
-                                        <button className="w-full mt-4 py-4 bg-primary-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl shadow-primary-500/10 hover:scale-[1.02] transition-transform">
-                                            <Sparkles className="w-4 h-4" />
+                                        <button
+                                            onClick={handleGenerate}
+                                            disabled={isSaving}
+                                            className="w-full mt-4 py-4 bg-primary-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl shadow-primary-500/10 hover:scale-[1.02] transition-transform disabled:opacity-50"
+                                        >
+                                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                                             Initialize Generation
                                         </button>
                                     </div>
@@ -286,26 +326,7 @@ export default function EditorPage() {
                             </div>
 
                             {/* Generated App Iframe/Preview */}
-                            <div className="w-full h-full overflow-auto bg-white">
-                                <div className="p-12">
-                                    <nav className="flex justify-between items-center mb-24">
-                                        <div className="w-10 h-10 rounded-xl bg-black" />
-                                        <div className="flex gap-8 text-sm font-bold text-gray-400">
-                                            <span>Platform</span>
-                                            <span>Genesis</span>
-                                            <span>Vision</span>
-                                        </div>
-                                    </nav>
-                                    <h1 className="text-7xl font-black text-gray-900 tracking-tighter mb-8 italic">THE NEXT <br /> <span className="text-gray-400">DIMENSION.</span></h1>
-                                    <p className="max-w-md text-gray-500 font-medium leading-relaxed mb-12">
-                                        Synthetic architecture generated by Prime Engine. Scalable, performant, and ready for deployment into your sector.
-                                    </p>
-                                    <div className="flex gap-4">
-                                        <div className="px-10 py-5 bg-black text-white font-black uppercase tracking-widest text-xs rounded-2xl">Initialize Unit</div>
-                                        <div className="px-10 py-5 border-2 border-gray-100 text-gray-950 font-black uppercase tracking-widest text-xs rounded-2xl">Learn Protocols</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Canvas state={currentProject?.canvasState} />
                         </div>
                     </div>
 
@@ -325,19 +346,39 @@ export default function EditorPage() {
                     <div className="p-6 border-b border-white/5">
                         <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-dark-500 mb-6 italic">Configuration</h3>
 
-                        {selectedId ? (
+                        {selectedComponent ? (
                             <div className="space-y-6">
                                 <div className="space-y-2">
                                     <label className="text-[9px] font-black text-dark-500 uppercase">Unit ID</label>
-                                    <div className="p-3 bg-dark-900 rounded-xl border border-white/5 text-[10px] font-mono text-primary-400">hero_sector_01</div>
+                                    <div className="p-3 bg-dark-900 rounded-xl border border-white/5 text-[10px] font-mono text-primary-400">{selectedComponent.id}</div>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-[9px] font-black text-dark-500 uppercase">Primary Matrix</label>
-                                    <select className="w-full bg-dark-900 border border-white/5 rounded-xl p-3 text-[10px] font-bold text-white uppercase focus:border-primary-500/30">
-                                        <option>Linear Gradient</option>
-                                        <option>Mesh Ambience</option>
-                                        <option>Solid Core</option>
-                                    </select>
+                                <div className="space-y-4">
+                                    <label className="text-[9px] font-black text-dark-500 uppercase">Configuration Matrix</label>
+                                    {Object.entries(selectedComponent.props || {}).map(([key, value]: [string, any]) => (
+                                        <div key={key} className="space-y-2">
+                                            <label className="text-[8px] font-bold text-dark-600 uppercase ml-1">{key}</label>
+                                            <input
+                                                type="text"
+                                                value={typeof value === 'string' ? value : JSON.stringify(value)}
+                                                onChange={(e) => {
+                                                    const newProps = { ...selectedComponent.props, [key]: e.target.value }
+                                                    const newComponents = currentProject!.canvasState.pages[0].components.map((c: any) =>
+                                                        c.id === selectedId ? { ...c, props: newProps } : c
+                                                    )
+                                                    updateProject(projectId, {
+                                                        canvasState: {
+                                                            ...currentProject!.canvasState,
+                                                            pages: [{
+                                                                ...currentProject!.canvasState.pages[0],
+                                                                components: newComponents
+                                                            }]
+                                                        }
+                                                    })
+                                                }}
+                                                className="w-full bg-dark-900 border border-white/5 rounded-xl p-3 text-[10px] font-bold text-white focus:border-primary-500/30 outline-none transition-all"
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ) : (
@@ -351,15 +392,31 @@ export default function EditorPage() {
                     <div className="flex-1 p-6 overflow-y-auto">
                         <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-dark-500 mb-6 italic">Active Layers</h3>
                         <div className="space-y-2">
-                            {['Navbar_Logic', 'Hero_Synthesis', 'Features_Matrix', 'Footer_Base'].map((layer, i) => (
-                                <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group">
+                            {currentProject?.canvasState?.pages?.[0]?.components.map((comp: any, i: number) => (
+                                <div
+                                    key={comp.id}
+                                    onClick={() => setSelectedId(comp.id)}
+                                    className={cn(
+                                        "flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer group",
+                                        selectedId === comp.id ? "bg-primary-500/10 border border-primary-500/20" : "hover:bg-white/5"
+                                    )}
+                                >
                                     <div className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-primary-500 opacity-40 group-hover:opacity-100 transition-opacity" />
-                                        <span className="text-[10px] font-bold text-dark-400 group-hover:text-white transition-colors">{layer}</span>
+                                        <div className={cn(
+                                            "w-1.5 h-1.5 rounded-full transition-opacity",
+                                            selectedId === comp.id ? "bg-primary-500 opacity-100" : "bg-primary-500 opacity-40 group-hover:opacity-100"
+                                        )} />
+                                        <span className={cn(
+                                            "text-[10px] font-bold transition-colors",
+                                            selectedId === comp.id ? "text-white" : "text-dark-400 group-hover:text-white"
+                                        )}>{comp.type.charAt(0).toUpperCase() + comp.type.slice(1)}_{i + 1}</span>
                                     </div>
                                     <Eye className="w-3.5 h-3.5 text-dark-600 group-hover:text-dark-400" />
                                 </div>
                             ))}
+                            {(!currentProject?.canvasState?.pages?.[0]?.components || currentProject.canvasState.pages[0].components.length === 0) && (
+                                <p className="text-[9px] font-bold text-dark-600 uppercase tracking-widest text-center py-4 italic">No Active Units</p>
+                            )}
                         </div>
                     </div>
                 </aside>

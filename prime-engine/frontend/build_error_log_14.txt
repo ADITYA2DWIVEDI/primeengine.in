@@ -1,0 +1,23 @@
+
+> prime-engine-frontend@1.0.0 build
+> next build
+
+   Γû▓ Next.js 14.1.0
+   - Experiments (use at your own risk):
+     ┬╖ esmExternals
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/app/about/page.tsx:39:9
+Type error: Property 'div' does not exist on type 'JSX.IntrinsicElements'.
+
+  37 |
+  38 |     return (
+> 39 |         <div className="min-h-screen py-24 px-6 relative overflow-hidden bg-dark-950">
+     |         ^
+  40 |             {/* Immersive Background */}
+  41 |             <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-primary-500/5 blur-[120px] pointer-events-none" />
+  42 |             <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-500/5 blur-[100px] pointer-events-none" />

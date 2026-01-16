@@ -1,0 +1,17 @@
+
+> prime-engine-frontend@1.0.0 build
+> next build
+
+   Γû▓ Next.js 14.1.0
+
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: The packages specified in the 'transpilePackages' conflict with the 'serverComponentsExternalPackages': undici, firebase
+    at getBaseWebpackConfig (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\build\webpack-config.js:614:19)
+    at C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\build\webpack-build\impl.js:148:40
+    at async Span.traceAsyncFn (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\trace\trace.js:151:20)
+    at async webpackBuildImpl (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\build\webpack-build\impl.js:133:21)
+    at async Object.workerMain (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\build\webpack-build\impl.js:313:20) {
+  type: 'Error'
+}

@@ -1,0 +1,92 @@
+
+> prime-engine-frontend@1.0.0 build
+> next build
+
+   Γû▓ Next.js 14.1.0
+   - Experiments (use at your own risk):
+     ┬╖ esmExternals
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/14) ...
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:84324) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:80980) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:85960) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:79744) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:78780) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:66140) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:71492) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:59516) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:76044) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:85756) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+TypeError: Cannot read properties of undefined (reading 'S')
+    at ml.exports.mu.exports (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\app\page.js:443:97864)
+    at C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\app\page.js:447:3913
+    at 6378 (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\app\page.js:447:3951)
+    at t (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\webpack-runtime.js:1:127)
+    at F (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:94693)
+    at C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:97108
+    at W._fromJSON (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:97546)
+    at JSON.parse (<anonymous>)
+    at N (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:94414)
+    at t (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:100799)
+
+   Generating static pages (3/14) 
+
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+
+TypeError: Cannot read properties of undefined (reading 'S')
+    at ml.exports.mu.exports (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\app\page.js:443:97864)
+    at C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\app\page.js:447:3913
+    at 6378 (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\app\page.js:447:3951)
+    at t (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\.next\server\webpack-runtime.js:1:127)
+    at F (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:94693)
+    at C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:97108
+    at W._fromJSON (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:97546)
+    at JSON.parse (<anonymous>)
+    at N (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:94414)
+    at t (C:\Users\Adity\.gemini\antigravity\scratch\prime-engine\frontend\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:100799)
+
+   Generating static pages (6/14) 
+
+   Generating static pages (10/14) 
+
+ Γ£ô Generating static pages (14/14) 
+
+> Export encountered errors on following paths:
+	/page: /

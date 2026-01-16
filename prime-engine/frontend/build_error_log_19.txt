@@ -1,0 +1,93 @@
+
+> prime-engine-frontend@1.0.0 build
+> next build
+
+   Γû▓ Next.js 14.1.0
+   - Experiments (use at your own risk):
+     ┬╖ esmExternals
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/14) ...
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:67572) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:85656) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:70880) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:84712) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:57692) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:12880) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:84892) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:82000) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:66324) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:84348) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ ΓÜá metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+(node:83912) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+   Generating static pages (3/14) 
+
+   Generating static pages (6/14) 
+
+   Generating static pages (10/14) 
+
+ Γ£ô Generating static pages (14/14) 
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+Γöî Γùï /                                    899 B          85.4 kB
+Γö£ Γùï /_not-found                          882 B          85.4 kB
+Γö£ Γùï /about                               5 kB            136 kB
+Γö£ Γùï /create                              4.34 kB         157 kB
+Γö£ Γùï /dashboard                           6.71 kB         175 kB
+Γö£ Γùï /docs                                5 kB            136 kB
+Γö£ ╬╗ /editor/[id]                         8.04 kB         169 kB
+Γö£ Γùï /integrations                        5.06 kB         136 kB
+Γö£ Γùï /login                               3.79 kB         203 kB
+Γö£ ╬╗ /preview/[id]                        4.59 kB         128 kB
+Γö£ Γùï /pricing                             4.14 kB         165 kB
+Γö£ Γùï /settings                            6.05 kB         145 kB
+Γö£ Γùï /signup                              3.88 kB         204 kB
+Γöö Γùï /templates                           6.89 kB         168 kB
++ First Load JS shared by all            84.5 kB
+  Γö£ chunks/69-e8937d7c2bb02e61.js        28.9 kB
+  Γö£ chunks/fd9d1056-a1cbc38189923ced.js  53.4 kB
+  Γöö other shared chunks (total)          2.21 kB
+
+
+Γùï  (Static)   prerendered as static content
+╬╗  (Dynamic)  server-rendered on demand using Node.js
+
